@@ -26,9 +26,9 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
+            min-height: 90vh; 
             margin: 0;
-            padding: 1rem;
+            padding: 1rem; /* Increased overall padding for better spacing on wide screens */
             box-sizing: border-box;
         }
         #app-container {
@@ -36,70 +36,72 @@
             border-radius: 16px;
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
             width: 100%;
-            max-width: 500px;
-            padding: 2rem;
+            max-width: 700px; /* Increased max-width for wider layout */
+            padding: 2.5rem; /* Increased padding for more internal space */
             text-align: center;
+            max-height: 98vh; 
+            overflow-y: auto;
         }
         h1 {
             color: var(--text-dark);
-            font-size: 1.75rem;
-            margin-bottom: 1.5rem;
+            font-size: 2rem; /* Increased font size */
+            margin-bottom: 1.5rem; /* Adjusted margin */
         }
         .level-selector {
-            margin-bottom: 1.5rem;
+            margin-bottom: 1.5rem; /* Adjusted margin */
         }
         .level-selector label {
             color: var(--text-light);
-            margin-right: 0.5rem;
+            margin-right: 0.75rem; /* Increased margin */
         }
         .level-selector select {
-            padding: 0.5rem 1rem;
+            padding: 0.6rem 1.2rem; /* Increased padding */
             border-radius: 8px;
             border: 1px solid var(--border-color);
-            font-size: 1rem;
+            font-size: 1.1rem; /* Increased font size */
         }
         .card-panel {
             background: linear-gradient(135deg, var(--primary-color), #60a5fa);
             color: white;
-            padding: 1.5rem 1rem;
+            padding: 2rem; /* Increased padding */
             border-radius: 12px;
-            margin-bottom: 1.5rem;
-            min-height: 160px;
+            margin-bottom: 2rem; /* Increased margin */
+            min-height: 180px; /* Increased min-height */
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
         }
         #kana-display {
-            font-size: 3.5rem;
+            font-size: 4rem; /* Increased font size */
             font-weight: 700;
         }
         #kanji-display {
-            font-size: 1.1rem;
+            font-size: 1.2rem; /* Increased font size */
             opacity: 0.8;
         }
         #form-display {
-            margin-top: 0.5rem;
+            margin-top: 0.75rem; /* Adjusted margin */
             font-weight: 500;
-            font-size: 1.1rem;
+            font-size: 1.2rem; /* Increased font size */
         }
         #verb-type-display {
-            margin-top: 0.25rem;
-            font-size: 0.9rem;
+            margin-top: 0.5rem; /* Adjusted margin */
+            font-size: 1rem; /* Increased font size */
             opacity: 0.7;
             background-color: rgba(0,0,0,0.1);
-            padding: 0.1rem 0.5rem;
+            padding: 0.2rem 0.6rem; /* Adjusted padding */
             border-radius: 1rem;
         }
         #answer-input {
             width: 100%;
-            padding: 1rem;
-            font-size: 1.25rem;
+            padding: 1.2rem; /* Increased padding */
+            font-size: 1.4rem; /* Increased font size */
             border: 2px solid var(--border-color);
             border-radius: 8px;
             box-sizing: border-box;
             transition: border-color 0.2s, background-color 0.2s;
-            margin-bottom: 1.5rem;
+            margin-bottom: 1.5rem; /* Adjusted margin */
         }
         #answer-input:focus {
             outline: none;
@@ -115,8 +117,8 @@
         }
         button {
             width: 100%;
-            padding: 1rem;
-            font-size: 1.1rem;
+            padding: 1.1rem; /* Increased padding */
+            font-size: 1.2rem; /* Increased font size */
             font-weight: bold;
             color: white;
             border: none;
@@ -132,26 +134,33 @@
         #next-button { background-color: var(--primary-color); }
         #next-button:hover { background-color: var(--primary-hover); }
         .feedback-area {
-            min-height: 4rem;
-            margin-top: 1rem;
+            min-height: 4rem; /* Adjusted min-height */
+            margin-top: 1.5rem; /* Adjusted margin */
         }
         #feedback-message { 
-            font-size: 1.2rem; 
+            font-size: 1.3rem; /* Increased font size */
             font-weight: bold; 
             transition: opacity 0.3s;
         }
         #feedback-message.correct { color: var(--correct-color); }
         #feedback-message.incorrect { color: var(--incorrect-color); }
-        #correct-answer-display { color: var(--text-light); }
+        #correct-answer-display { 
+            color: var(--text-light); 
+            font-size: 1rem; /* Increased font size */
+        }
         .progress-area {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-top: 1.5rem;
-            padding-top: 1rem;
+            margin-top: 2rem; /* Increased margin */
+            padding-top: 1.2rem; /* Increased padding */
             border-top: 1px solid #e2e8f0;
         }
-        .progress-area p { color: var(--text-light); }
+        .progress-area p { 
+            color: var(--text-light); 
+            font-size: 1rem; /* Increased font size */
+            margin: 0.2rem 0; 
+        }
         .progress-area span { font-weight: bold; color: var(--text-dark); }
         #reset-button {
             background: none;
@@ -160,6 +169,7 @@
             cursor: pointer;
             font-weight: bold;
             padding: 0.5rem;
+            font-size: 1rem; /* Increased font size */
         }
         .hidden {
             display: none;
@@ -227,7 +237,7 @@
                 { word: "見る", kana: "みる", meaning: "to see", type: "ru-verb", conjugations: { masu: "みます", te: "みて", ta: "みた", nai: "みない", masuNegative: "みません", taNegative: "みなかった", potential: "みられる", volitional: "みよう", passive: "みられる", causative: "みさせる", ba: "みれば", tara: "みたら", imperative: "みろ", desire: "みたい", tsumori: "みる", iAdjectiveNegative: "", iAdjectivePast: "", iAdjectivePastNegative: "", naAdjectiveNegative: "", naAdjectivePast: "", naAdjectivePastNegative: "" }},
                 { word: "買う", kana: "かう", meaning: "to buy", type: "u-verb", conjugations: { masu: "かいます", te: "かって", ta: "かった", nai: "かわない", masuNegative: "かいません", taNegative: "かわなかった", potential: "かえる", volitional: "かおう", passive: "かわれる", causative: "かわせる", ba: "かえば", tara: "かったら", imperative: "かえ", desire: "かいたい", tsumori: "かう", iAdjectiveNegative: "", iAdjectivePast: "", iAdjectivePastNegative: "", naAdjectiveNegative: "", naAdjectivePast: "", naAdjectivePastNegative: "" }},
                 { word: "待つ", kana: "まつ", meaning: "to wait", type: "u-verb", conjugations: { masu: "まちます", te: "まって", ta: "まった", nai: "またない", masuNegative: "まちません", taNegative: "またなかった", potential: "まてる", volitional: "まとう", passive: "またれる", causative: "またせる", ba: "まてば", tara: "まったら", imperative: "まて", desire: "まちたい", tsumori: "まつ", iAdjectiveNegative: "", iAdjectivePast: "", iAdjectivePastNegative: "", naAdjectiveNegative: "", naAdjectivePast: "", naAdjectivePastNegative: "" }},
-                { word: "帰る", kana: "かえる", meaning: "to return", type: "u-verb", conjugations: { masu: "かえります", te: "かえって", ta: "かえった", nai: "かえらない", masuNegative: "かえりません", taNegative: "かえなかった", potential: "かえれる", volitional: "かえろう", passive: "かえられる", causative: "かえらせる", ba: "かえれば", tara: "かえったら", imperative: "かえ", desire: "かえりたい", tsumori: "かえる", iAdjectiveNegative: "", iAdjectivePast: "", iAdjectivePastNegative: "", naAdjectiveNegative: "", naAdjectivePast: "", naAdjectivePastNegative: "" }}
+                { word: "帰る", kana: "かえる", meaning: "to return", type: "u-verb", conjugations: { masu: "かえります", te: "かえって", ta: "かえった", nai: "かえらない", masuNegative: "かえりません", taNegative: "かえらなかった", potential: "かえれる", volitional: "かえろう", passive: "かえられる", causative: "かえらせる", ba: "かえれば", tara: "かえったら", imperative: "かえ", desire: "かえりたい", tsumori: "かえる", iAdjectiveNegative: "", iAdjectivePast: "", iAdjectivePastNegative: "", naAdjectiveNegative: "", naAdjectivePast: "", naAdjectivePastNegative: "" }}
             ];
 
             const japaneseAdjectives = [
