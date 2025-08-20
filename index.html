@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Japanese Verb and Adjective Conjugation Practice</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-color: #f0f4f8;
+            --card-color: #ffffff;
+            --primary-color: #3b82f6;
+            --primary-hover: #2563eb;
+            --correct-color: #16a34a;
+            --incorrect-color: #dc2626;
+            --text-dark: #1e293b;
+            --text-light: #64748b;
+            --border-color: #cbd5e1;
+        }
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            background-color: var(--bg-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 1rem;
+            box-sizing: border-box;
+        }
+        #app-container {
+            background-color: var(--card-color);
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 500px;
+            padding: 2rem;
+            text-align: center;
+        }
+        h1 {
+            color: var(--text-dark);
+            font-size: 1.75rem;
+            margin-bottom: 1.5rem;
+        }
+        .level-selector {
+            margin-bottom: 1.5rem;
+        }
+        .level-selector label {
+            color: var(--text-light);
+            margin-right: 0.5rem;
+        }
+        .level-selector select {
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            font-size: 1rem;
+        }
+        .card-panel {
+            background: linear-gradient(135deg, var(--primary-color), #60a5fa);
+            color: white;
+            padding: 1.5rem 1rem;
+            border-radius: 12px;
+            margin-bottom: 1.5rem;
+            min-height: 160px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        #kana-display {
+            font-size: 3.5rem;
+            font-weight: 700;
+        }
+        #kanji-display {
+            font-size: 1.1rem;
+            opacity: 0.8;
+        }
+        #form-display {
+            margin-top: 0.5rem;
+            font-weight: 500;
+            font-size: 1.1rem;
+        }
+        #verb-type-display {
+            margin-top: 0.25rem;
+            font-size: 0.9rem;
+            opacity: 0.7;
+            background-color: rgba(0,0,0,0.1);
+            padding: 0.1rem 0.5rem;
+            border-radius: 1rem;
+        }
+        #answer-input {
+            width: 100%;
+            padding: 1rem;
+            font-size: 1.25rem;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            box-sizing: border-box;
+            transition: border-color 0.2s, background-color 0.2s;
+            margin-bottom: 1.5rem;
+        }
+        #answer-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+        #answer-input.correct {
+            border-color: var(--correct-color);
+            background-color: #f0fdf4;
+        }
+        #answer-input.incorrect {
+            border-color: var(--incorrect-color);
+            background-color: #fef2f2;
+        }
+        button {
+            width: 100%;
+            padding: 1rem;
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.2s, transform 0.1s;
+        }
+        button:hover {
+            transform: translateY(-2px);
+        }
+        #check-button { background-color: var(--correct-color); }
+        #check-button:hover { background-color: #15803d; }
+        #next-button { background-color: var(--primary-color); }
+        #next-button:hover { background-color: var(--primary-hover); }
+        .feedback-area {
+            min-height: 4rem;
+            margin-top: 1rem;
+        }
+        #feedback-message { 
+            font-size: 1.2rem; 
+            font-weight: bold; 
+            transition: opacity 0.3s;
+        }
+        #feedback-message.correct { color: var(--correct-color); }
+        #feedback-message.incorrect { color: var(--incorrect-color); }
+        #correct-answer-display { color: var(--text-light); }
+        .progress-area {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 1.5rem;
+            padding-top: 1rem;
+            border-top: 1px solid #e2e8f0;
+        }
+        .progress-area p { color: var(--text-light); }
+        .progress-area span { font-weight: bold; color: var(--text-dark); }
+        #reset-button {
+            background: none;
+            border: none;
+            color: var(--incorrect-color);
+            cursor: pointer;
+            font-weight: bold;
+            padding: 0.5rem;
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="app-container">
+        <h1>Conjugation Dojo</h1>
+
+        <div class="level-selector">
+            <label for="topic-select">Topic:</label>
+            <select id="topic-select">
+                <optgroup label="Verbs">
+                    <option value="Verbs: Basic">Basic Forms</option>
+                    <option value="Verbs: Intermediate">Intermediate Forms</option>
+                    <option value="Verbs: Advanced">Advanced Forms</option>
+                </optgroup>
+                <optgroup label="Adjectives">
+                    <option value="Adjectives: I-Adjective">I-Adjectives</option>
+                    <option value="Adjectives: Na-Adjective">Na-Adjectives</option>
+                </optgroup>
+            </select>
+        </div>
+
+        <div class="card-panel">
+            <p id="kana-display"></p>
+            <p id="kanji-display"></p>
+            <p id="form-display"></p>
+            <p id="verb-type-display"></p>
+        </div>
+
+        <input type="text" id="answer-input" placeholder="Type Romaji here..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+
+        <button id="check-button">Check</button>
+        <button id="next-button" class="hidden">Next</button>
+
+        <div class="feedback-area">
+            <p id="feedback-message"></p>
+            <p id="correct-answer-display"></p>
+        </div>
+
+        <div class="progress-area">
+            <div>
+                <p>Correct: <span id="correct-count">0</span></p>
+                <p>Incorrect: <span id="incorrect-count">0</span></p>
+            </div>
+            <button id="reset-button">Reset Session</button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- DATA ---
+            const japaneseVerbs = [
+                { word: "行く", kana: "いく", meaning: "to go", type: "u-verb (special)", conjugations: { masu: "いきます", te: "いって", ta: "いった", nai: "いかない", masuNegative: "いきません", taNegative: "いかなかった", potential: "いける", volitional: "いこう", passive: "いかれる", causative: "いかせる", ba: "いけば", tara: "いったら", imperative: "いけ", desire: "いきたい", tsumori: "いく", iAdjectiveNegative: "", iAdjectivePast: "", iAdjectivePastNegative: "", naAdjectiveNegative: "", naAdjectivePast: "", naAdjectivePastNegative: "" }},
+                { word: "食べる", kana: "たべる", meaning: "to eat", type: "ru-verb", conjugations: { masu: "たべます", te: "たべて", ta: "たべた", nai: "たべない", masuNegative: "たべません", taNegative: "たべなかった", potential: "たべられる", volitional: "たべよう", passive: "たべられる", causative: "たべさせる", ba: "たべれば", tara: "たべたら", imperative: "たべろ", desire: "たべたい", tsumori: "たべる", iAdjectiveNegative: "", iAdjectivePast: "", iAdjectivePastNegative: "", naAdjectiveNegative: "", naAdjectivePast: "", naAdjectivePastNegative: "" }},
+                { word: "飲む", kana: "のむ", meaning: "to drink", type: "u-verb", conjugations: { masu: "のみます", te: "のんで", ta: "のんだ", nai: "のまない", masuNegative: "のみません", taNegative: "のまなかった", potential: "のめる", volitional: "のもう", passive: "のまれる", causative: "のませる", ba: "のめば", tara: "のんだら", imperative: "のめ", desire: "のみたい", tsumori: "のむ", iAdjectiveNegative: "", iAdjectivePast: "", iAdjectivePastNegative: "", naAdjectiveNegative: "", naAdjectivePast: "", naAdjectivePastNegative: "" }},
+                { word: "する", kana: "する", meaning: "to do", type: "irregular", conjugations: { masu: "します", te: "して", ta: "した", nai: "しない", masuNegative: "しません", taNegative: "しなかった", potential: "できる", volitional: "しよう", passive: "される", causative: "させる", ba: "すれば", tara: "したら", imperative: "しろ", desire: "したい", tsumori: "する", iAdjectiveNegative: "", iAdjectivePast: "", iAdjectivePastNegative: "", naAdjectiveNegative: "", naAdjectivePast: "", naAdjectivePastNegative: "" }},
+                { word: "来る", kana: "くる", meaning: "to come", type: "irregular", conjugations: { masu: "きます", te: "きて", ta: "きた", nai: "こない", masuNegative: "きません", taNegative: "こなかった", potential: "こられる", volitional: "こよう", passive: "こられる", causative: "こさせる", ba: "くれば", tara: "きたら", imperative: "こい", desire: "きたい", tsumori: "くる", iAdjectiveNegative: "", iAdjectivePast: "", iAdjectivePastNegative: "", naAdjectiveNegative: "", naAdjectivePast: "", naAdjectivePastNegative: "" }},
+                { word: "書く", kana: "かく", meaning: "to write", type: "u-verb", conjugations: { masu: "かきます", te: "かいて", ta: "かいた", nai: "かかない", masuNegative: "かきません", taNegative: "かかなかった", potential: "かける", volitional: "かこう", passive: "かかれる", causative: "かかせる", ba: "かけば", tara: "かいたら", imperative: "かけ", desire: "かきたい", tsumori: "かく", iAdjectiveNegative: "", iAdjectivePast: "", iAdjectivePastNegative: "", naAdjectiveNegative: "", naAdjectivePast: "", naAdjectivePastNegative: "" }},
+                { word: "読む", kana: "よむ", meaning: "to read", type: "u-verb", conjugations: { masu: "よみます", te: "よんで", ta: "よんだ", nai: "よまない", masuNegative: "よみません", taNegative: "よまなかった", potential: "よめる", volitional: "よもう", passive: "よまれる", causative: "よませる", ba: "よめば", tara: "よんだら", imperative: "よめ", desire: "よみたい", tsumori: "よむ", iAdjectiveNegative: "", iAdjectivePast: "", iAdjectivePastNegative: "", naAdjectiveNegative: "", naAdjectivePast: "", naAdjectivePastNegative: "" }},
+                { word: "話す", kana: "はなす", meaning: "to speak", type: "u-verb", conjugations: { masu: "はなします", te: "はなして", ta: "はなした", nai: "はなさない", masuNegative: "はなしません", taNegative: "はなさなかった", potential: "はなせる", volitional: "はなそう", passive: "はなされる", causative: "はなさせる", ba: "はなせば", tara: "はなしたら", imperative: "はなせ", desire: "はなしたい", tsumori: "はなす", iAdjectiveNegative: "", iAdjectivePast: "", iAdjectivePastNegative: "", naAdjectiveNegative: "", naAdjectivePast: "", naAdjectivePastNegative: "" }},
+                { word: "見る", kana: "みる", meaning: "to see", type: "ru-verb", conjugations: { masu: "みます", te: "みて", ta: "みた", nai: "みない", masuNegative: "みません", taNegative: "みなかった", potential: "みられる", volitional: "みよう", passive: "みられる", causative: "みさせる", ba: "みれば", tara: "みたら", imperative: "みろ", desire: "みたい", tsumori: "みる", iAdjectiveNegative: "", iAdjectivePast: "", iAdjectivePastNegative: "", naAdjectiveNegative: "", naAdjectivePast: "", naAdjectivePastNegative: "" }},
+                { word: "買う", kana: "かう", meaning: "to buy", type: "u-verb", conjugations: { masu: "かいます", te: "かって", ta: "かった", nai: "かわない", masuNegative: "かいません", taNegative: "かわなかった", potential: "かえる", volitional: "かおう", passive: "かわれる", causative: "かわせる", ba: "かえば", tara: "かったら", imperative: "かえ", desire: "かいたい", tsumori: "かう", iAdjectiveNegative: "", iAdjectivePast: "", iAdjectivePastNegative: "", naAdjectiveNegative: "", naAdjectivePast: "", naAdjectivePastNegative: "" }},
+                { word: "待つ", kana: "まつ", meaning: "to wait", type: "u-verb", conjugations: { masu: "まちます", te: "まって", ta: "まった", nai: "またない", masuNegative: "まちません", taNegative: "またなかった", potential: "まてる", volitional: "まとう", passive: "またれる", causative: "またせる", ba: "まてば", tara: "まったら", imperative: "まて", desire: "まちたい", tsumori: "まつ", iAdjectiveNegative: "", iAdjectivePast: "", iAdjectivePastNegative: "", naAdjectiveNegative: "", naAdjectivePast: "", naAdjectivePastNegative: "" }},
+                { word: "帰る", kana: "かえる", meaning: "to return", type: "u-verb", conjugations: { masu: "かえります", te: "かえって", ta: "かえった", nai: "かえらない", masuNegative: "かえりません", taNegative: "かえなかった", potential: "かえれる", volitional: "かえろう", passive: "かえられる", causative: "かえらせる", ba: "かえれば", tara: "かえったら", imperative: "かえ", desire: "かえりたい", tsumori: "かえる", iAdjectiveNegative: "", iAdjectivePast: "", iAdjectivePastNegative: "", naAdjectiveNegative: "", naAdjectivePast: "", naAdjectivePastNegative: "" }}
+            ];
+
+            const japaneseAdjectives = [
+                { word: "高い", kana: "たかい", type: "i-adjective", meaning: "expensive, tall, high", conjugations: { masu: "", te: "", ta: "", nai: "", masuNegative: "", taNegative: "", potential: "", volitional: "", passive: "", causative: "", ba: "", tara: "", imperative: "", desire: "", tsumori: "", iAdjectiveNegative: "たかくない", iAdjectivePast: "たかかった", iAdjectivePastNegative: "たかくなかった", naAdjectiveNegative: "", naAdjectivePast: "", naAdjectivePastNegative: "" }},
+                { word: "安い", kana: "やすい", type: "i-adjective", meaning: "cheap", conjugations: { masu: "", te: "", ta: "", nai: "", masuNegative: "", taNegative: "", potential: "", volitional: "", passive: "", causative: "", ba: "", tara: "", imperative: "", desire: "", tsumori: "", iAdjectiveNegative: "やすくない", iAdjectivePast: "やすかった", iAdjectivePastNegative: "やすくなかった", naAdjectiveNegative: "", naAdjectivePast: "", naAdjectivePastNegative: "" }},
+                { word: "好き", kana: "すき", type: "na-adjective", meaning: "likable, favorite", conjugations: { masu: "", te: "", ta: "", nai: "", masuNegative: "", taNegative: "", potential: "", volitional: "", passive: "", causative: "", ba: "", tara: "", imperative: "", desire: "", tsumori: "", iAdjectiveNegative: "", iAdjectivePast: "", iAdjectivePastNegative: "", naAdjectiveNegative: "すきじゃない", naAdjectivePast: "すきだった", naAdjectivePastNegative: "すきじゃなかった" }},
+                { word: "静か", kana: "しずか", type: "na-adjective", meaning: "quiet", conjugations: { masu: "", te: "", ta: "", nai: "", masuNegative: "", taNegative: "", potential: "", volitional: "", passive: "", causative: "", ba: "", tara: "", imperative: "", desire: "", tsumori: "", iAdjectiveNegative: "", iAdjectivePast: "", iAdjectivePastNegative: "", naAdjectiveNegative: "しずかじゃない", naAdjectivePast: "しずかだった", naAdjectivePastNegative: "しずかじゃなかった" }},
+                { word: "楽しい", kana: "たのしい", type: "i-adjective", meaning: "fun", conjugations: { masu: "", te: "", ta: "", nai: "", masuNegative: "", taNegative: "", potential: "", volitional: "", passive: "", causative: "", ba: "", tara: "", imperative: "", desire: "", tsumori: "", iAdjectiveNegative: "たのしくない", iAdjectivePast: "たのしかった", iAdjectivePastNegative: "たのしくなかった", naAdjectiveNegative: "", naAdjectivePast: "", naAdjectivePastNegative: "" }},
+                { word: "元気", kana: "げんき", type: "na-adjective", meaning: "healthy, energetic", conjugations: { masu: "", te: "", ta: "", nai: "", masuNegative: "", taNegative: "", potential: "", volitional: "", passive: "", causative: "", ba: "", tara: "", imperative: "", desire: "", tsumori: "", iAdjectiveNegative: "", iAdjectivePast: "", iAdjectivePastNegative: "", naAdjectiveNegative: "げんきじゃない", naAdjectivePast: "げんきだった", naAdjectivePastNegative: "げんきじゃなかった" }}
+            ];
+
+            const conjugationForms = [
+                { key: "masu", display: "Masu Form (ます)", category: "Verbs: Basic" },
+                { key: "masuNegative", display: "Masu Negative (ません)", category: "Verbs: Basic" },
+                { key: "te", display: "Te Form (て)", category: "Verbs: Basic" },
+                { key: "ta", display: "Past Tense (た)", category: "Verbs: Basic" },
+                { key: "nai", display: "Nai Form (ない)", category: "Verbs: Basic" },
+                { key: "taNegative", display: "Past Negative (なかった)", category: "Verbs: Intermediate" },
+                { key: "potential", display: "Potential Form (can do)", category: "Verbs: Intermediate" },
+                { key: "volitional", display: "Volitional Form (let's do)", category: "Verbs: Intermediate" },
+                { key: "desire", display: "Desire Form (たい)", category: "Verbs: Intermediate" },
+                { key: "tsumori", display: "Tsumori Form (つもり)", category: "Verbs: Intermediate" },
+                { key: "passive", display: "Passive Form", category: "Verbs: Advanced" },
+                { key: "causative", display: "Causative Form", category: "Verbs: Advanced" },
+                { key: "ba", display: "Conditional (ば)", category: "Verbs: Advanced" },
+                { key: "tara", display: "Conditional (たら)", category: "Verbs: Advanced" },
+                { key: "imperative", display: "Imperative Form", category: "Verbs: Advanced" },
+                { key: "iAdjectiveNegative", display: "I-Adjective Negative (くない)", category: "Adjectives: I-Adjective" },
+                { key: "iAdjectivePast", display: "I-Adjective Past (かった)", category: "Adjectives: I-Adjective" },
+                { key: "iAdjectivePastNegative", display: "I-Adjective Past Negative (くなかった)", category: "Adjectives: I-Adjective" },
+                { key: "naAdjectiveNegative", display: "Na-Adjective Negative (じゃない)", category: "Adjectives: Na-Adjective" },
+                { key: "naAdjectivePast", display: "Na-Adjective Past (だった)", category: "Adjectives: Na-Adjective" },
+                { key: "naAdjectivePastNegative", display: "Na-Adjective Past Negative (じゃなかった)", category: "Adjectives: Na-Adjective" }
+            ];
+
+            const romajiToHiraganaMap = {
+                // Keep longer keys first for correct matching
+                "kya": "きゃ", "kyu": "きゅ", "kyo": "きょ", 
+                "sha": "しゃ", "shu": "しゅ", "sho": "しょ", 
+                "cha": "ちゃ", "chu": "ちゅ", "cho": "ちょ", 
+                "nya": "にゃ", "nyu": "にゅ", "nyo": "にょ", 
+                "hya": "ひゃ", "hyu": "ひゅ", "hyo": "ひょ", 
+                "mya": "みゃ", "myu": "みゅ", "myo": "みょ", 
+                "rya": "りゃ", "ryu": "りゅ", "ryo": "りょ", 
+                "gya": "ぎゃ", "gyu": "ぎゅ", "gyo": "ぎょ", 
+                "ja": "じゃ", "ju": "じゅ", "jo": "じょ", 
+                "bya": "びゃ", "byu": "びゅ", "byo": "びょ", 
+                "pya": "ぴゃ", "pyu": "ぴゅ", "pyo": "ぴょ", 
+                "shi": "し", "chi": "ち", "tsu": "つ", "ji": "じ", "fu": "ふ", "wo": "を", 
+                "ka": "か", "ki": "き", "ku": "く", "ke": "け", "ko": "こ", 
+                "sa": "さ", "su": "す", "se": "せ", "so": "そ", 
+                "ta": "た", "te": "て", "to": "と", 
+                "na": "な", "ni": "に", "nu": "ぬ", "ne": "ね", "no": "の", 
+                "ha": "は", "hi": "ひ", "he": "へ", "ho": "ほ", 
+                "ma": "ま", "mi": "み", "mu": "む", "me": "め", "mo": "も", 
+                "ya": "や", "yu": "ゆ", "yo": "よ", 
+                "ra": "ら", "ri": "り", "ru": "る", "re": "れ", "ro": "ろ", 
+                "wa": "わ", 
+                "ga": "が", "gi": "ぎ", "gu": "ぐ", "ge": "げ", "go": "ご", 
+                "za": "ざ", "ze": "ぜ", "zo": "ぞ", 
+                "da": "だ", "de": "で", "do": "ど", 
+                "ba": "ば", "bi": "び", "bu": "ぶ", "be": "べ", "bo": "ぼ", 
+                "pa": "ぱ", "pi": "ぴ", "pu": "ぷ", "pe": "ぺ", "po": "ぽ", 
+                "a": "あ", "i": "い", "u": "う", "e": "え", "o": "お"
+            };
+            // Sort keys by length in descending order to ensure greedy matching (e.g., "chi" before "ch")
+            const sortedRomajiKeys = Object.keys(romajiToHiraganaMap).sort((a, b) => b.length - a.length);
+
+            // --- DOM ELEMENTS ---
+            const dom = {
+                kanaDisplay: document.getElementById('kana-display'),
+                kanjiDisplay: document.getElementById('kanji-display'),
+                formDisplay: document.getElementById('form-display'),
+                verbTypeDisplay: document.getElementById('verb-type-display'),
+                answerInput: document.getElementById('answer-input'),
+                checkButton: document.getElementById('check-button'),
+                nextButton: document.getElementById('next-button'),
+                feedbackMessage: document.getElementById('feedback-message'),
+                correctAnswerDisplay: document.getElementById('correct-answer-display'),
+                correctCount: document.getElementById('correct-count'),
+                incorrectCount: document.getElementById('incorrect-count'),
+                resetButton: document.getElementById('reset-button'),
+                topicSelect: document.getElementById('topic-select')
+            };
+
+            // --- STATE ---
+            let state = {
+                learningQueue: [],
+                currentCard: null,
+                correctCount: 0,
+                incorrectCount: 0,
+                currentTopic: "Verbs: Basic",
+                typedRomajiBuffer: "" // Stores the raw Romaji characters typed by the user
+            };
+
+            // --- FUNCTIONS ---
+            const convertRomajiToHiragana = (fullRomajiString) => {
+                let hiraganaResult = "";
+                let buffer = fullRomajiString.toLowerCase();
+                let i = 0;
+
+                while (i < buffer.length) {
+                    let charsConsumed = 0;
+
+                    // 1. Prioritize "nn" conversion for 'ん'
+                    if (buffer.substring(i, i + 2) === "nn") {
+                        hiraganaResult += "ん";
+                        charsConsumed = 2;
+                    }
+                    // 2. Handle small tsu (っ) for double consonants (e.g., "tta" -> "った")
+                    else if (i + 1 < buffer.length && buffer[i] === buffer[i + 1] && !"aiueon".includes(buffer[i])) {
+                        hiraganaResult += "っ";
+                        charsConsumed = 1;
+                    }
+                    // 3. Attempt to match longest Romaji syllable from the map
+                    else {
+                        for (const key of sortedRomajiKeys) {
+                            if (buffer.substring(i).startsWith(key)) {
+                                hiraganaResult += romajiToHiraganaMap[key];
+                                charsConsumed = key.length;
+                                break; // Found longest match, move to next part of buffer
+                            }
+                        }
+                    }
+
+                    // 4. Handle a standalone 'n' that should become 'ん' if not already consumed by "nn" or a syllable
+                    if (charsConsumed === 0 && buffer[i] === 'n') {
+                        const nextChar = (i + 1 < buffer.length) ? buffer[i + 1] : '';
+
+                        // Check if 'n' followed by `nextChar` could form any known Romaji syllable (e.g., 'na', 'nyu')
+                        let couldFormMappedSyllable = false;
+                        for (const key of sortedRomajiKeys) {
+                            if (key.startsWith('n' + nextChar)) { // Example: check if "na", "nyu" exist in map
+                                couldFormMappedSyllable = true;
+                                break;
+                            }
+                        }
+
+                        // Convert 'n' to 'ん' if:
+                        // a) It's the last character in the buffer (e.g., "hon")
+                        // b) It's followed by a consonant AND that consonant doesn't form a mapped syllable with 'n' (e.g., "kankei" -> かんけい)
+                        if (nextChar === '' || (!"aiueoy".includes(nextChar) && !couldFormMappedSyllable)) {
+                            hiraganaResult += "ん";
+                            charsConsumed = 1;
+                        } else {
+                            // If 'n' is followed by a vowel/y or a consonant that *could* form a syllable,
+                            // then leave 'n' as Romaji for now. It will be re-evaluated with more input.
+                            // This is crucial to allow "na" to form "な" instead of "んあ".
+                            hiraganaResult += buffer[i]; // Append literally for now (keep as Romaji)
+                            charsConsumed = 1;
+                        }
+                    } 
+                    // 5. Fallback for any other unmatched characters (e.g., partial "k", "t", or unknown Romaji)
+                    else if (charsConsumed === 0) {
+                        hiraganaResult += buffer[i];
+                        charsConsumed = 1;
+                    }
+
+                    i += charsConsumed;
+                }
+                return hiraganaResult;
+            };
+
+            const updateCounts = () => {
+                dom.correctCount.textContent = state.correctCount;
+                dom.incorrectCount.textContent = state.incorrectCount;
+            };
+
+            const saveState = () => {
+                localStorage.setItem('conjugationPracticeState', JSON.stringify(state));
+            };
+
+            const loadState = () => {
+                const savedState = localStorage.getItem('conjugationPracticeState');
+                if (savedState) {
+                    const loadedState = JSON.parse(savedState);
+                    state.currentTopic = loadedState.currentTopic;
+                    state.correctCount = loadedState.correctCount;
+                    state.incorrectCount = loadedState.incorrectCount;
+                    state.learningQueue = loadedState.learningQueue;
+                    state.typedRomajiBuffer = loadedState.typedRomajiBuffer || ""; 
+                }
+                dom.topicSelect.value = state.currentTopic;
+                updateCounts();
+            };
+
+            const initializeLearningQueue = (forceReset = false) => {
+                if (forceReset) {
+                    state.correctCount = 0;
+                    state.incorrectCount = 0;
+                    state.learningQueue = [];
+                    state.typedRomajiBuffer = ""; // Clear buffer on reset
+                    dom.answerInput.value = ''; // Also clear display
+                }
+                
+                if (state.learningQueue.length === 0) {
+                    const formsToInclude = conjugationForms.filter(form => form.category === state.currentTopic);
+                    state.learningQueue = [];
+
+                    if (state.currentTopic.startsWith("Verbs")) {
+                        japaneseVerbs.forEach(verb => {
+                            formsToInclude.forEach(form => {
+                                if (verb.conjugations[form.key]) {
+                                    state.learningQueue.push({ item: verb, formKey: form.key });
+                                }
+                            });
+                        });
+                    } else if (state.currentTopic.startsWith("Adjectives")) {
+                        japaneseAdjectives.forEach(adjective => {
+                            formsToInclude.forEach(form => {
+                                if (adjective.conjugations[form.key]) {
+                                    state.learningQueue.push({ item: adjective, formKey: form.key });
+                                }
+                            });
+                        });
+                    }
+
+                    state.learningQueue = state.learningQueue.sort(() => Math.random() - 0.5);
+                }
+                updateCounts();
+                displayNextCard();
+            };
+
+            const displayNextCard = () => {
+                state.typedRomajiBuffer = ""; // Reset buffer for new card
+                dom.answerInput.value = '';
+                dom.feedbackMessage.textContent = '';
+                dom.correctAnswerDisplay.textContent = '';
+                dom.answerInput.focus();
+                dom.checkButton.classList.remove('hidden');
+                dom.nextButton.classList.add('hidden');
+                dom.feedbackMessage.className = '';
+                dom.answerInput.classList.remove('correct', 'incorrect');
+
+                if (state.learningQueue.length === 0) {
+                    dom.kanaDisplay.textContent = "お疲れ様！";
+                    dom.kanjiDisplay.textContent = "(Well done!)";
+                    dom.formDisplay.textContent = "You've finished this topic. Reset or choose another.";
+                    dom.verbTypeDisplay.textContent = "";
+                    dom.checkButton.classList.add('hidden');
+                    return;
+                }
+
+                state.currentCard = state.learningQueue.shift();
+                const { item, formKey } = state.currentCard;
+                const form = conjugationForms.find(f => f.key === formKey);
+
+                dom.kanaDisplay.textContent = item.kana;
+                dom.kanjiDisplay.textContent = `(${item.word} - ${item.meaning})`;
+                dom.formDisplay.textContent = `Conjugate to: ${form.display}`;
+                dom.verbTypeDisplay.textContent = item.type;
+            };
+
+            const checkAnswer = () => {
+                if (!state.currentCard) return;
+
+                // The answer check should use the *converted* Romaji from the input field
+                const userAnswerHiragana = dom.answerInput.value.trim();
+                const correctAnswerHiragana = state.currentCard.item.conjugations[state.currentCard.formKey];
+
+                if (userAnswerHiragana === correctAnswerHiragana) {
+                    dom.feedbackMessage.textContent = "Correct!";
+                    dom.feedbackMessage.className = 'correct';
+                    dom.answerInput.classList.add('correct');
+                    state.correctCount++;
+                    state.learningQueue.push(state.currentCard);
+                } else {
+                    dom.feedbackMessage.textContent = "Incorrect";
+                    dom.feedbackMessage.className = 'incorrect';
+                    dom.answerInput.classList.add('incorrect');
+                    dom.correctAnswerDisplay.textContent = `Correct: ${correctAnswerHiragana}`;
+                    state.incorrectCount++;
+                    state.learningQueue.splice(Math.min(3, state.learningQueue.length), 0, state.currentCard);
+                }
+
+                updateCounts();
+                saveState();
+                dom.checkButton.classList.add('hidden');
+                dom.nextButton.classList.remove('hidden');
+            };
+
+            // --- EVENT LISTENERS ---
+            dom.checkButton.addEventListener('click', checkAnswer);
+            dom.nextButton.addEventListener('click', displayNextCard);
+
+            // Listener for actual key presses to manage the Romaji buffer
+            dom.answerInput.addEventListener('keydown', (e) => {
+                e.preventDefault(); // Prevent default browser input behavior
+
+                const key = e.key;
+                let updateDisplay = true;
+
+                if (key.length === 1 && key.match(/^[a-z0-9\s]$/i)) { // Alphanumeric and space characters
+                    state.typedRomajiBuffer += key.toLowerCase();
+                } else if (key === 'Backspace') {
+                    if (state.typedRomajiBuffer.length > 0) {
+                        state.typedRomajiBuffer = state.typedRomajiBuffer.slice(0, -1);
+                    }
+                } else if (key === 'Enter') {
+                    if (!dom.checkButton.classList.contains('hidden')) {
+                        checkAnswer();
+                    } else if (!dom.nextButton.classList.contains('hidden')) {
+                        displayNextCard();
+                    }
+                    // After check/next, the buffer should be cleared for the next card
+                    state.typedRomajiBuffer = "";
+                    updateDisplay = false; // Display will be updated by displayNextCard
+                } else {
+                    updateDisplay = false; // Do not update display for other keys (shift, ctrl, arrows etc.)
+                }
+
+                if (updateDisplay) {
+                    const displayValue = convertRomajiToHiragana(state.typedRomajiBuffer);
+                    dom.answerInput.value = displayValue;
+                    // Keep cursor at the end for smooth typing.
+                    dom.answerInput.setSelectionRange(displayValue.length, displayValue.length);
+                }
+            });
+
+            // The 'input' event listener is removed to ensure `state.typedRomajiBuffer`
+            // is only populated by explicit keydown events, providing precise control.
+            // This means pasting text into the field will NOT be converted automatically.
+
+            dom.topicSelect.addEventListener('change', (e) => {
+                state.currentTopic = e.target.value;
+                initializeLearningQueue(true); // Force reset when topic changes
+                saveState();
+            });
+
+            dom.resetButton.addEventListener('click', () => {
+                // IMPORTANT: Do NOT use confirm() in production code. Use a custom modal instead.
+                // For this exercise, it's kept as per previous implementation but noted.
+                if (window.confirm('Are you sure you want to reset your progress for this topic?')) {
+                    initializeLearningQueue(true);
+                    saveState();
+                }
+            });
+
+            // --- INITIALIZE APP ---
+            loadState();
+            initializeLearningQueue();
+        });
+    </script>
+</body>
+</html>
