@@ -1,2 +1,2 @@
 # Japanese_Conjugation_App
-A simple app I built to help me study Japanese conjugation.
+A simple app I built to help me study Japanese conjugation. It's still a work in progress. 
