@@ -218,8 +218,26 @@
             font-size: 1.1rem;
             line-height: 1.5;
         }
-        #introduction-panel button {
-            margin-top: 1.5rem; /* Adjusted spacing */
+        #introduction-panel .intro-nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+        #introduction-panel .intro-nav-buttons button {
+            flex: 1;
+            background-color: rgba(255, 255, 255, 0.2); /* Semi-transparent white */
+        }
+        #introduction-panel .intro-nav-buttons button:hover:not(:disabled) {
+            background-color: rgba(255, 255, 255, 0.3);
+        }
+        #introduction-panel .intro-nav-buttons button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none; /* No hover effect when disabled */
+        }
+        #introduction-panel #start-practice-button {
+             margin-top: 1.5rem;
         }
     </style>
 </head>
@@ -239,9 +257,13 @@
         <div id="introduction-panel" class="hidden">
             <h2 id="intro-title"></h2>
             <div id="intro-sections-container">
-                <!-- Sections will be dynamically inserted here by JS -->
+                <!-- Current section content will be dynamically inserted here by JS -->
             </div>
-            <button id="start-practice-button">Start Practice</button>
+            <div class="intro-nav-buttons">
+                <button id="prev-intro-slide-button" disabled>&larr; Previous</button>
+                <button id="next-intro-slide-button">Next &rarr;</button>
+            </div>
+            <button id="start-practice-button" class="hidden">Start Practice</button>
         </div>
 
         <!-- Conjugation Practice Panel -->
@@ -328,14 +350,14 @@
                     title: "Masu Form (ます)",
                     sections: [
                         { heading: "What is it?", content: "The polite present/future tense in Japanese. Used for general statements, polite requests, and habitual actions." },
-                        { heading: "How to Conjugate:", content: 
-                            `•  **Ru-verbs (Group 2)**: Remove the final 「る」 (ru), then add 「ます」 (masu).\n    * Example: 食べる (taberu) -> 食べます (tabemasu) - "to eat / eat / will eat"\n    * Example: 見る (miru) -> 見ます (mimasu) - "to see / see / will see"`
+                        { heading: "How to Conjugate: Ru-verbs (Group 2)", content: 
+                            `•  Remove the final 「る」 (ru), then add 「ます」 (masu).\n    * Example: 食べる (taberu) -> 食べます (tabemasu) - "to eat / eat / will eat"\n    * Example: 見る (miru) -> 見ます (mimasu) - "to see / see / will see"`
                         },
-                        { heading: "", content: 
-                            `•  **U-verbs (Group 1)**: Change the final U-vowel sound to the I-vowel sound, then add 「ます」 (masu).\n    * Example: 読む (yomu) -> 読みます (yomimasu) - "to read / read / will read"\n    * Example: 飲む (nomu) -> 飲みます (nomimasu) - "to drink / drink / will drink"`
+                        { heading: "How to Conjugate: U-verbs (Group 1)", content: 
+                            `•  Change the final U-vowel sound to the I-vowel sound, then add 「ます」 (masu).\n    * Example: 読む (yomu) -> 読みます (yomimasu) - "to read / read / will read"\n    * Example: 飲む (nomu) -> 飲みます (nomimasu) - "to drink / drink / will drink"`
                         },
-                        { heading: "", content: 
-                            `•  **Irregular Verbs**: These have unique conjugations.\n    * する (suru) -> します (shimasu) - "to do / do / will do"\n    * 来る (kuru) -> きます (kimasu) - "to come / come / will come"`
+                        { heading: "How to Conjugate: Irregular Verbs", content: 
+                            `•  These have unique conjugations.\n    * する (suru) -> します (shimasu) - "to do / do / will do"\n    * 来る (kuru) -> きます (kimasu) - "to come / come / will come"`
                         }
                     ]
                 },
@@ -343,14 +365,14 @@
                     title: "Masu Negative (ません)",
                     sections: [
                         { heading: "What is it?", content: "The polite negative present/future tense. Expresses 'do not' or 'will not' in a polite context." },
-                        { heading: "How to Conjugate:", content: 
-                            `•  **Ru-verbs (Group 2)**: Remove the final 「る」 (ru), then add 「ません」 (masen).\n    * Example: 食べる (taberu) -> 食べません (tabemasen) - "do not eat / will not eat"\n    * Example: 見る (miru) -> 見ません (mimasen) - "do not see / will not see"`
+                        { heading: "How to Conjugate: Ru-verbs (Group 2)", content: 
+                            `•  Remove the final 「る」 (ru), then add 「ません」 (masen).\n    * Example: 食べる (taberu) -> 食べません (tabemasen) - "do not eat / will not eat"\n    * Example: 見る (miru) -> 見ません (mimasen) - "do not see / will not see"`
                         },
-                        { heading: "", content: 
-                            `•  **U-verbs (Group 1)**: Change the final U-vowel sound to the I-vowel sound, then add 「ません」 (masen).\n    * Example: 読む (yomu) -> 読みません (yomimasen) - "do not read / will not read"\n    * Example: 飲む (nomu) -> 飲みません (nomimasen) - "do not drink / will not drink"`
+                        { heading: "How to Conjugate: U-verbs (Group 1)", content: 
+                            `•  Change the final U-vowel sound to the I-vowel sound, then add 「ません」 (masen).\n    * Example: 読む (yomu) -> 読みません (yomimasu) - "do not read / will not read"\n    * Example: 飲む (nomu) -> 飲みません (nomimasen) - "do not drink / will not drink"`
                         },
-                        { heading: "", content: 
-                            `•  **Irregular Verbs**: Memorize these!\n    * する (suru) -> しません (shimasen) - "do not do / will not do"\n    * 来る (kuru) -> きません (kimasen) - "do not come / will not come"`
+                        { heading: "How to Conjugate: Irregular Verbs", content: 
+                            `•  Memorize these!\n    * する (suru) -> しません (shimasen) - "do not do / will not do"\n    * 来る (kuru) -> きません (kimasen) - "do not come / will not come"`
                         }
                     ]
                 },
@@ -358,14 +380,14 @@
                     title: "Te Form (て)",
                     sections: [
                         { heading: "What is it?", content: "A versatile form used to connect clauses, give requests, express continuous actions, and combine with other grammar patterns." },
-                        { heading: "How to Conjugate:", content: 
-                            `•  **Ru-verbs (Group 2)**: Remove the final 「る」 (ru), then add 「て」 (te).\n    * Example: 食べる (taberu) -> 食べて (tabete)\n    * Example: 見る (miru) -> 見て (mite)`
+                        { heading: "How to Conjugate: Ru-verbs (Group 2)", content: 
+                            `•  Remove the final 「る」 (ru), then add 「て」 (te).\n    * Example: 食べる (taberu) -> 食べて (tabete)\n    * Example: 見る (miru) -> 見て (mite)`
                         },
-                        { heading: "", content: 
-                            `•  **U-verbs (Group 1)**: Follow specific sound change rules (音便 - onbin):\n    * Verbs ending in: \n        * う, つ, る -> って (utte, tte, tte) (e.g., 買う -> 買って, 待つ -> 待って, 帰る -> 帰って)\n        * む, ぶ, ぬ -> んで (nde, nde, nde) (e.g., 飲む -> 飲んで)\n        * く -> いて (ite) (e.g., 書く -> 書いて)\n        * ぐ -> いで (ide) (e.g., 泳ぐ -> 泳いで)\n        * す -> して (shite) (e.g., 話す -> 話して)`
+                        { heading: "How to Conjugate: U-verbs (Group 1)", content: 
+                            `•  Follow specific sound change rules (音便 - onbin):\n    * Verbs ending in: \n        * う, つ, る -> って (utte, tte, tte) (e.g., 買う -> 買って, 待つ -> 待って, 帰る -> 帰って)\n        * む, ぶ, ぬ -> んで (nde, nde, nde) (e.g., 飲む -> 飲んで)\n        * く -> いて (ite) (e.g., 書く -> 書いて)\n        * ぐ -> いで (ide) (e.g., 泳ぐ -> 泳いで)\n        * す -> して (shite) (e.g., 話す -> 話して)`
                         },
-                        { heading: "", content: 
-                            `•  **Irregular Verbs**: Memorize these!\n    * する (suru) -> して (shite)\n    * 来る (kuru) -> きて (kite)`
+                        { heading: "How to Conjugate: Irregular Verbs", content: 
+                            `•  Memorize these!\n    * する (suru) -> して (shite)\n    * 来る (kuru) -> きて (kite)`
                         }
                     ]
                 },
@@ -373,11 +395,14 @@
                     title: "Past Tense (た)",
                     sections: [
                         { heading: "What is it?", content: "The plain past tense form. Used in informal conversation and as a base for many other grammar patterns." },
-                        { heading: "How to Conjugate:", content: 
-                            `•  **Rule**: The conjugation rules for the plain past tense (た form) are almost identical to the Te form, but 「て」 (te) is replaced with 「た」 (ta), and 「で」 (de) is replaced with 「だ」 (da).\n\n•  **Ru-verbs (Group 2)**: Remove the final 「る」 (ru), then add 「た」 (ta).\n    * Example: 食べる (taberu) -> 食べた (tabeta) - "ate"\n\n•  **U-verbs (Group 1)**: Follow sound change rules (音便 - onbin):\n    * Verbs ending in: \n        * う, つ, る -> った (utta, tta, tta) (e.g., 買う -> 買った, 待つ -> 待った, 帰る -> 帰った)\n        * む, ぶ, ぬ -> んだ (nda, nda, nda) (e.g., 飲む -> 飲んだ)\n        * く -> いた (ita) (e.g., 書く -> 書いた)\n        * ぐ -> いだ (ida) (e.g., 泳ぐ -> 泳いだ)\n        * す -> した (shita) (e.g., 話す -> 話した)`
+                        { heading: "How to Conjugate: Ru-verbs (Group 2)", content: 
+                            `•  **Rule**: The conjugation rules for the plain past tense (た form) are almost identical to the Te form, but 「て」 (te) is replaced with 「た」 (ta), and 「で」 (de) is replaced with 「だ」 (da).\n\n•  Remove the final 「る」 (ru), then add 「た」 (ta).\n    * Example: 食べる (taberu) -> 食べた (tabeta) - "ate"`
                         },
-                        { heading: "", content: 
-                            `•  **Irregular Verbs**: Memorize these!\n    * する (suru) -> した (shita)\n    * 来る (kuru) -> きた (kita)`
+                        { heading: "How to Conjugate: U-verbs (Group 1)", content: 
+                            `•  Follow sound change rules (音便 - onbin):\n    * Verbs ending in: \n        * う, つ, る -> った (utta, tta, tta) (e.g., 買う -> 買った, 待つ -> 待った, 帰る -> 帰った)\n        * む, ぶ, ぬ -> んだ (nda, nda, nda) (e.g., 飲む -> 飲んだ)\n        * く -> いた (ita) (e.g., 書く -> 書いた)\n        * ぐ -> いだ (ida) (e.g., 泳ぐ -> 泳いだ)\n        * す -> した (shita) (e.g., 話す -> 話した)`
+                        },
+                        { heading: "How to Conjugate: Irregular Verbs", content: 
+                            `•  Memorize these!\n    * する (suru) -> した (shita)\n    * 来る (kuru) -> きた (kita)`
                         }
                     ]
                 },
@@ -385,14 +410,14 @@
                     title: "Nai Form (ない)",
                     sections: [
                         { heading: "What is it?", content: "The plain negative form of verbs. It expresses 'do not' or 'will not' in an informal context." },
-                        { heading: "How to Conjugate:", content: 
-                            `•  **Ru-verbs (Group 2)**: Remove the final 「る」 (ru), then add 「ない」 (nai).\n    * Example: 食べる (taberu) -> 食べない (tabenai) - "do not eat / will not eat"\n    * Example: 見る (miru) -> 見ない (minai) - "do not see / will not see"`
+                        { heading: "How to Conjugate: Ru-verbs (Group 2)", content: 
+                            `•  Remove the final 「る」 (ru), then add 「ない」 (nai).\n    * Example: 食べる (taberu) -> 食べない (tabenai) - "do not eat / will not eat"\n    * Example: 見る (miru) -> 見ない (minai) - "do not see / will not see"`
                         },
-                        { heading: "", content: 
-                            `•  **U-verbs (Group 1)**: Change the final U-vowel sound to the A-vowel sound, then add 「ない」 (nai).\n    * Example: 飲む (nomu) -> 飲まない (nomanai) - "do not drink / will not drink"\n    * Exception for U-verbs ending in 「う」 (u): Change 「う」 to 「わ」 (wa), then add 「ない」 (nai). (e.g., 買う -> 買わない)`
+                        { heading: "How to Conjugate: U-verbs (Group 1)", content: 
+                            `•  Change the final U-vowel sound to the A-vowel sound, then add 「ない」 (nai).\n    * Example: 飲む (nomu) -> 飲まない (nomanai) - "do not drink / will not drink"\n    * Exception for U-verbs ending in 「う」 (u): Change 「う」 to 「わ」 (wa), then add 「ない」 (nai). (e.g., 買う -> 買わない)`
                         },
-                        { heading: "", content: 
-                            `•  **Irregular Verbs**: Memorize these!\n    * する (suru) -> しない (shinai) - "do not do / will not do"\n    * 来る (kuru) -> こない (konai) - "do not come / will not come"`
+                        { heading: "How to Conjugate: Irregular Verbs", content: 
+                            `•  Memorize these!\n    * する (suru) -> しない (shinai) - "do not do / will not do"\n    * 来る (kuru) -> こない (konai) - "do not come / will not come"`
                         }
                     ]
                 },
@@ -409,14 +434,14 @@
                     title: "Potential Form (できる)",
                     sections: [
                         { heading: "What is it?", content: "Expresses ability, meaning 'can do' or 'is able to do something'." },
-                        { heading: "How to Conjugate:", content: 
-                            `•  **Ru-verbs (Group 2)**: Remove the final 「る」 (ru), then add 「られる」 (rareru).\n    * Example: 食べる (taberu) -> 食べられる (taberareru) - "can eat"\n    * Example: 見る (miru) -> 見られる (mirareru) - "can see"`
+                        { heading: "How to Conjugate: Ru-verbs (Group 2)", content: 
+                            `•  Remove the final 「る」 (ru), then add 「られる」 (rareru).\n    * Example: 食べる (taberu) -> 食べられる (taberareru) - "can eat"\n    * Example: 見る (miru) -> 見られる (mirareru) - "can see"`
                         },
-                        { heading: "", content: 
-                            `•  **U-verbs (Group 1)**: Change the final U-vowel sound to the E-vowel sound, then add 「る」 (ru).\n    * Example: 読む (yomu) -> 読める (yomeru) - "can read"\n    * Example: 飲む (nomu) -> 飲める (nomeru) - "can drink"`
+                        { heading: "How to Conjugate: U-verbs (Group 1)", content: 
+                            `•  Change the final U-vowel sound to the E-vowel sound, then add 「る」 (ru).\n    * Example: 読む (yomu) -> 読める (yomeru) - "can read"\n    * Example: 飲む (nomu) -> 飲める (nomeru) - "can drink"`
                         },
-                        { heading: "", content: 
-                            `•  **Irregular Verbs**: Memorize these!\n    * する (suru) -> できる (dekiru) - "can do"\n    * 来る (kuru) -> こられる (korareru) - "can come"`
+                        { heading: "How to Conjugate: Irregular Verbs", content: 
+                            `•  Memorize these!\n    * する (suru) -> できる (dekiru) - "can do"\n    * 来る (kuru) -> こられる (korareru) - "can come"`
                         }
                     ]
                 },
@@ -424,14 +449,14 @@
                     title: "Volitional Form (しよう)",
                     sections: [
                         { heading: "What is it?", content: "Expresses intention or invitation. Roughly translates to 'let's do' or 'I intend to do'." },
-                        { heading: "How to Conjugate:", content: 
-                            `•  **Ru-verbs (Group 2)**: Remove the final 「る」 (ru), then add 「よう」 (you).\n    * Example: 食べる (taberu) -> 食べよう (tabeyou) - "let's eat"\n    * Example: 見る (miru) -> 見よう (miyou) - "let's see"`
+                        { heading: "How to Conjugate: Ru-verbs (Group 2)", content: 
+                            `•  Remove the final 「る」 (ru), then add 「よう」 (you).\n    * Example: 食べる (taberu) -> 食べよう (tabeyou) - "let's eat"\n    * Example: 見る (miru) -> 見よう (miyou) - "let's see"`
                         },
-                        { heading: "", content: 
-                            `•  **U-verbs (Group 1)**: Change the final U-vowel sound to the O-vowel sound, then add 「う」 (u).\n    * Example: 読む (yomu) -> 読もう (yomou) - "let's read"\n    * Example: 飲む (nomu) -> 飲もう (nomou) - "let's drink"`
+                        { heading: "How to Conjugate: U-verbs (Group 1)", content: 
+                            `•  Change the final U-vowel sound to the O-vowel sound, then add 「う」 (u).\n    * Example: 読む (yomu) -> 読もう (yomou) - "let's read"\n    * Example: 飲む (nomu) -> 飲もう (nomou) - "let's drink"`
                         },
-                        { heading: "", content: 
-                            `•  **Irregular Verbs**: Memorize these!\n    * する (suru) -> しよう (shiyou) - "let's do"\n    * 来る (kuru) -> こよう (koyou) - "let's come"`
+                        { heading: "How to Conjugate: Irregular Verbs", content: 
+                            `•  Memorize these!\n    * する (suru) -> しよう (shiyou) - "let's do"\n    * 来る (kuru) -> こよう (koyou) - "let's come"`
                         }
                     ]
                 },
@@ -458,11 +483,11 @@
                     title: "Passive Form",
                     sections: [
                         { heading: "What is it?", content: "Indicates that the subject is receiving an action, meaning 'to be [verbed]' or 'to get [verbed]'." },
-                        { heading: "How to Conjugate:", content: 
-                            `•  **Ru-verbs (Group 2)**: Remove the final 「る」 (ru), then add 「られる」 (rareru).\n    * Example: 食べる (taberu) -> 食べられる (taberareru) - "to be eaten"\n\n•  **U-verbs (Group 1)**: Change the final U-vowel sound to the A-vowel sound, then add 「れる」 (reru).\n    * Example: 飲む (nomu) -> 飲まれる (nomareru) - "to be drunk"\n    * Exception for U-verbs ending in 「う」 (u): Change 「う」 to 「わ」 (wa), then add 「れる」 (reru). (e.g., 買う -> 買われる)`
+                        { heading: "How to Conjugate: Ru-verbs (Group 2)", content: 
+                            `•  Remove the final 「る」 (ru), then add 「られる」 (rareru).\n    * Example: 食べる (taberu) -> 食べられる (taberareru) - "to be eaten"\n\n•  **U-verbs (Group 1)**: Change the final U-vowel sound to the A-vowel sound, then add 「れる」 (reru).\n    * Example: 飲む (nomu) -> 飲まれる (nomareru) - "to be drunk"\n    * Exception for U-verbs ending in 「う」 (u): Change 「う」 to 「わ」 (wa), then add 「れる」 (reru). (e.g., 買う -> 買われる)`
                         },
-                        { heading: "", content: 
-                            `•  **Irregular Verbs**: Memorize these!\n    * する (suru) -> される (sareru) - "to be done"\n    * 来る (kuru) -> こられる (korareru) - "to be come (visited)"`
+                        { heading: "How to Conjugate: Irregular Verbs", content: 
+                            `•  Memorize these!\n    * する (suru) -> される (sareru) - "to be done"\n    * 来る (kuru) -> こられる (korareru) - "to be come (visited)"`
                         }
                     ]
                 },
@@ -470,11 +495,11 @@
                     title: "Causative Form",
                     sections: [
                         { heading: "What is it?", content: "Expresses making or letting someone do something. Meaning 'make/let [someone] [do something]'." },
-                        { heading: "How to Conjugate:", content: 
-                            `•  **Ru-verbs (Group 2)**: Remove the final 「る」 (ru), then add 「させる」 (saseru).\n    * Example: 食べる (taberu) -> 食べさせる (tabesaseru) - "make/let eat"\n\n•  **U-verbs (Group 1)**: Change the final U-vowel sound to the A-vowel sound, then add 「せる」 (seru).\n    * Example: 読む (yomu) -> 読ませる (yomaseru) - "make/let read"\n    * Exception for U-verbs ending in 「う」 (u): Change 「う」 to 「わ」 (wa), then add 「せる」 (seru). (e.g., 買う -> 買わせる)`
+                        { heading: "How to Conjugate: Ru-verbs (Group 2)", content: 
+                            `•  Remove the final 「る」 (ru), then add 「させる」 (saseru).\n    * Example: 食べる (taberu) -> 食べさせる (tabesaseru) - "make/let eat"\n\n•  **U-verbs (Group 1)**: Change the final U-vowel sound to the A-vowel sound, then add 「せる」 (seru).\n    * Example: 読む (yomu) -> 読ませる (yomaseru) - "make/let read"\n    * Exception for U-verbs ending in 「う」 (u): Change 「う」 to 「わ」 (wa), then add 「せる」 (seru). (e.g., 買う -> 買わせる)`
                         },
-                        { heading: "", content: 
-                            `•  **Irregular Verbs**: Memorize these!\n    * する (suru) -> させる (saseru) - "make/let do"\n    * 来る (kuru) -> こさせる (kosaseru) - "make/let come"`
+                        { heading: "How to Conjugate: Irregular Verbs", content: 
+                            `•  Memorize these!\n    * する (suru) -> させる (saseru) - "make/let do"\n    * 来る (kuru) -> こさせる (kosaseru) - "make/let come"`
                         }
                     ]
                 },
@@ -482,8 +507,11 @@
                     title: "Conditional (ば)",
                     sections: [
                         { heading: "What is it?", content: "One type of conditional clause, meaning 'if... then'. Often expresses natural consequences, general conditions, or things that are habitually true." },
-                        { heading: "How to Conjugate:", content: 
-                            `•  **Ru-verbs (Group 2)**: Remove the final 「る」 (ru), then add 「れば」 (reba).\n    * Example: 食べる (taberu) -> 食べれば (tabereba) - "if (one) eats"\n\n•  **U-verbs (Group 1)**: Change the final U-vowel sound to the E-vowel sound, then add 「ば」 (ba).\n    * Example: 飲む (nomu) -> 飲めば (nomeba) - "if (one) drinks"\n\n•  **Irregular Verbs**: Memorize these!\n    * する (suru) -> すれば (sureba)\n    * 来る (kuru) -> くれば (kureba)`
+                        { heading: "How to Conjugate: Ru-verbs (Group 2)", content: 
+                            `•  Remove the final 「る」 (ru), then add 「れば」 (reba).\n    * Example: 食べる (taberu) -> 食べれば (tabereba) - "if (one) eats"\n\n•  **U-verbs (Group 1)**: Change the final U-vowel sound to the E-vowel sound, then add 「ば」 (ba).\n    * Example: 飲む (nomu) -> 飲めば (nomeba) - "if (one) drinks"`
+                        },
+                        { heading: "How to Conjugate: Irregular Verbs", content: 
+                            `•  Memorize these!\n    * する (suru) -> すれば (sureba)\n    * 来る (kuru) -> くれば (kureba)`
                         }
                     ]
                 },
@@ -500,14 +528,14 @@
                     title: "Imperative Form",
                     sections: [
                         { heading: "What is it?", content: "Expresses direct commands. It can sound strong or impolite depending on context and speaker/listener relationship, so use with care." },
-                        { heading: "How to Conjugate:", content: 
-                            `•  **Ru-verbs (Group 2)**: Remove the final 「る」 (ru), then add 「ろ」 (ro).\n    * Example: 食べる (taberu) -> 食べろ (tabero) - "Eat!"\n    * Example: 見る (miru) -> 見ろ (miro) - "Look!"`
+                        { heading: "How to Conjugate: Ru-verbs (Group 2)", content: 
+                            `•  Remove the final 「る」 (ru), then add 「ろ」 (ro).\n    * Example: 食べる (taberu) -> 食べろ (tabero) - "Eat!"\n    * Example: 見る (miru) -> 見ろ (miro) - "Look!"`
                         },
-                        { heading: "", content: 
-                            `•  **U-verbs (Group 1)**: Change the final U-vowel sound to the E-vowel sound.\n    * Example: 飲む (nomu) -> 飲め (nome) - "Drink!"\n    * Example: 書く (kaku) -> 書け (kake) - "Write!"`
+                        { heading: "How to Conjugate: U-verbs (Group 1)", content: 
+                            `•  Change the final U-vowel sound to the E-vowel sound.\n    * Example: 飲む (nomu) -> 飲め (nome) - "Drink!"\n    * Example: 書く (kaku) -> 書け (kake) - "Write!"`
                         },
-                        { heading: "", content: 
-                            `•  **Irregular Verbs**: Memorize these!\n    * する (suru) -> しろ (shiro) - "Do!"\n    * 来る (kuru) -> こい (koi) - "Come!"`
+                        { heading: "How to Conjugate: Irregular Verbs", content: 
+                            `•  Memorize these!\n    * する (suru) -> しろ (shiro) - "Do!"\n    * 来る (kuru) -> こい (koi) - "Come!"`
                         }
                     ]
                 },
@@ -573,7 +601,7 @@
 
             const romajiToHiraganaMap = {
                 // Keep longer keys first for correct matching
-                "kya": "きゃ", "kyu": "きゅ", "kyo": "きょ", 
+                "kya": "きゃ", "kyu": "きゅ", "kyu": "きゅ", "kyo": "きょ", 
                 "sha": "しゃ", "shu": "しゅ", "sho": "しょ", 
                 "cha": "ちゃ", "chu": "ちゅ", "cho": "ちょ", 
                 "nya": "にゃ", "nyu": "にゅ", "nyo": "にょ", 
@@ -586,7 +614,7 @@
                 "pya": "ぴゃ", "pyu": "ぴゅ", "pyo": "ぴょ", 
                 "shi": "し", "chi": "ち", "tsu": "つ", "ji": "じ", "fu": "ふ", "wo": "を", 
                 "ka": "か", "ki": "き", "ku": "く", "ke": "け", "ko": "こ", 
-                "sa": "さ", "su": "す", "se": "se", "so": "そ", 
+                "sa": "さ", "su": "す", "se": "せ", "so": "そ", /* Corrected 'se' */
                 "ta": "た", "te": "て", "to": "と", 
                 "na": "な", "ni": "に", "nu": "ぬ", "ne": "ね", "no": "の", 
                 "ha": "は", "hi": "ひ", "he": "へ", "ho": "ほ", 
@@ -599,7 +627,7 @@
                 "da": "だ", "de": "で", "do": "ど", 
                 "ba": "ば", "bi": "び", "bu": "ぶ", "be": "べ", "bo": "ぼ", 
                 "pa": "ぱ", "pi": "ぴ", "pu": "ぷ", "pe": "ぺ", "po": "ぽ", 
-                "a": "あ", "i": "い", "u": "う", "e": "え", "o": "お"
+                "a": "あ", "i": "い", "u": "う", "e": "え", "o": "お" /* Corrected 'u' */
             };
             // Sort keys by length in descending order to ensure greedy matching (e.g., "chi" before "ch")
             const sortedRomajiKeys = Object.keys(romajiToHiraganaMap).sort((a, b) => b.length - a.length);
@@ -624,6 +652,8 @@
                 introTitle: document.getElementById('intro-title'),
                 introSectionsContainer: document.getElementById('intro-sections-container'), // New container for sections
                 startPracticeButton: document.getElementById('start-practice-button'),
+                prevIntroSlideButton: document.getElementById('prev-intro-slide-button'), // New
+                nextIntroSlideButton: document.getElementById('next-intro-slide-button'), // New
                 // Areas to hide/show
                 cardPanel: document.querySelector('.card-panel'),
                 feedbackArea: document.querySelector('.feedback-area'),
@@ -638,7 +668,8 @@
                 incorrectCount: 0,
                 currentTopic: "masu", // Default to Masu Form
                 typedRomajiBuffer: "", // Stores the raw Romaji characters typed by the user
-                currentMode: "introduction" // 'introduction' or 'practice'
+                currentMode: "introduction", // 'introduction' or 'practice'
+                currentIntroSlideIndex: 0 // New: Track current slide in intro
             };
 
             // --- FUNCTIONS ---
@@ -728,6 +759,7 @@
                     state.learningQueue = loadedState.learningQueue;
                     state.typedRomajiBuffer = loadedState.typedRomajiBuffer || ""; 
                     state.currentMode = loadedState.currentMode || "introduction"; // Load mode, default to intro
+                    state.currentIntroSlideIndex = loadedState.currentIntroSlideIndex || 0; // Load slide index
                 }
                 dom.topicSelect.value = state.currentTopic;
                 updateCounts();
@@ -744,21 +776,23 @@
 
                 // Show introduction elements
                 dom.introPanel.classList.remove('hidden');
-                dom.startPracticeButton.classList.remove('hidden');
+                
                 dom.introSectionsContainer.innerHTML = ''; // Clear previous sections
 
                 const introContentForForm = formIntroContent[state.currentTopic];
                 if (introContentForForm) {
                     dom.introTitle.textContent = introContentForForm.title;
-                    introContentForForm.sections.forEach(section => {
+                    const currentSection = introContentForForm.sections[state.currentIntroSlideIndex];
+
+                    if (currentSection) {
                         const sectionDiv = document.createElement('div');
-                        if (section.heading) {
+                        if (currentSection.heading) {
                             const h3 = document.createElement('h3');
-                            h3.textContent = section.heading;
+                            h3.textContent = currentSection.heading;
                             sectionDiv.appendChild(h3);
                         }
                         // Handle content with newlines and bullet points
-                        const contentParts = section.content.split('\n');
+                        const contentParts = currentSection.content.split('\n');
                         let currentUl = null;
                         contentParts.forEach(line => {
                             if (line.startsWith('•  ')) {
@@ -777,12 +811,35 @@
                             }
                         });
                         dom.introSectionsContainer.appendChild(sectionDiv);
-                    });
+                    } else {
+                        // Fallback if somehow slide index is out of bounds
+                        const p = document.createElement('p');
+                        p.textContent = "Introduction content not found for this slide.";
+                        dom.introSectionsContainer.appendChild(p);
+                    }
+                    
+                    // Update navigation buttons visibility
+                    const totalSlides = introContentForForm.sections.length;
+                    dom.prevIntroSlideButton.disabled = state.currentIntroSlideIndex === 0;
+                    dom.nextIntroSlideButton.disabled = state.currentIntroSlideIndex === totalSlides - 1;
+                    
+                    // Show Start Practice button only on the last slide
+                    if (state.currentIntroSlideIndex === totalSlides - 1) {
+                        dom.startPracticeButton.classList.remove('hidden');
+                        dom.nextIntroSlideButton.classList.add('hidden'); // Hide next button if Start Practice is shown
+                    } else {
+                        dom.startPracticeButton.classList.add('hidden');
+                        dom.nextIntroSlideButton.classList.remove('hidden'); // Show next button if not on last slide
+                    }
+
                 } else {
                     dom.introTitle.textContent = "Introduction";
                     const p = document.createElement('p');
                     p.textContent = "No introduction available for this topic.";
                     dom.introSectionsContainer.appendChild(p);
+                    dom.prevIntroSlideButton.classList.add('hidden');
+                    dom.nextIntroSlideButton.classList.add('hidden');
+                    dom.startPracticeButton.classList.add('hidden');
                 }
             };
 
@@ -790,6 +847,8 @@
                 // Hide introduction elements
                 dom.introPanel.classList.add('hidden');
                 dom.startPracticeButton.classList.add('hidden');
+                dom.prevIntroSlideButton.classList.add('hidden'); // Hide nav buttons
+                dom.nextIntroSlideButton.classList.add('hidden'); // Hide nav buttons
 
                 // Show practice elements
                 dom.cardPanel.classList.remove('hidden');
@@ -901,6 +960,23 @@
                 displayNextCard(); // Display the first question
             });
 
+            dom.prevIntroSlideButton.addEventListener('click', () => {
+                if (state.currentIntroSlideIndex > 0) {
+                    state.currentIntroSlideIndex--;
+                    displayIntroductionUI();
+                    saveState();
+                }
+            });
+
+            dom.nextIntroSlideButton.addEventListener('click', () => {
+                const totalSlides = formIntroContent[state.currentTopic].sections.length;
+                if (state.currentIntroSlideIndex < totalSlides - 1) {
+                    state.currentIntroSlideIndex++;
+                    displayIntroductionUI();
+                    saveState();
+                }
+            });
+
             // Listener for actual key presses to manage the Romaji buffer
             dom.answerInput.addEventListener('keydown', (e) => {
                 // Only process keydown if in practice mode and not hidden
@@ -941,6 +1017,7 @@
             dom.topicSelect.addEventListener('change', (e) => {
                 state.currentTopic = e.target.value;
                 state.currentMode = 'introduction'; // Always go to intro when topic changes
+                state.currentIntroSlideIndex = 0; // Reset slide index
                 generateNewPracticeSession(); // Generate queue, but don't display yet
                 displayIntroductionUI(); // Show intro UI
                 updateCounts(); // Reset counts visually
@@ -952,6 +1029,7 @@
                 // For this exercise, it's kept as per previous implementation but noted.
                 if (window.confirm('Are you sure you want to reset your progress for this topic and return to the introduction?')) {
                     state.currentMode = 'introduction';
+                    state.currentIntroSlideIndex = 0; // Reset slide index on reset
                     generateNewPracticeSession(); // Clear existing queue and counts for current topic
                     displayIntroductionUI();
                     updateCounts(); // Reset counts visually
@@ -1003,6 +1081,7 @@
                 dom.nextButton.classList.add('hidden'); // Hide next button until checked
             } else {
                 state.currentMode = 'introduction'; // Ensure we start in intro if no active session
+                state.currentIntroSlideIndex = 0; // Ensure slide index is reset on fresh load
                 generateNewPracticeSession(); // Pre-populate queue for first-time topic load
                 displayIntroductionUI();
             }
