@@ -400,3 +400,120 @@ const formIntroContent = {
         ]
     }
 };
+
+// --- NEW: JLPT N5 & N4 GRAMMAR SECTION ---
+const japaneseGrammar = [
+    // --- N5 Grammar Points ---
+    {
+        grammar: "AはBです",
+        meaning: "A is B.",
+        level: "N5",
+        explanation: "This is the most basic sentence structure. It equates one noun (A) with another (B). 「は」 (wa) is the topic marker, and 「です」 (desu) is the polite copula.",
+        examples: [
+            { jp: "私は学生です。", kana: "わたしはがくせいです。", en: "I am a student." },
+            { jp: "これは本です。", kana: "これはほんです。", en: "This is a book." }
+        ]
+    },
+    {
+        grammar: "～か",
+        meaning: "Question Marker",
+        level: "N5",
+        explanation: "Adding 「か」 (ka) to the end of a declarative sentence turns it into a question.",
+        examples: [
+            { jp: "あれはあなたの傘ですか。", kana: "あれはあなたのかさですか。", en: "Is that your umbrella?" },
+            { jp: "田中さんは日本人ですか。", kana: "たなかさんはにほんじんですか。", en: "Is Mr. Tanaka Japanese?" }
+        ]
+    },
+    {
+        grammar: "～の",
+        meaning: "Possessive Particle ('s)",
+        level: "N5",
+        explanation: "The particle 「の」 (no) connects two nouns. It primarily shows possession, but can also indicate origin or relationship.",
+        examples: [
+            { jp: "これは私のペンです。", kana: "これはわたしのペンです。", en: "This is my pen." },
+            { jp: "日本の車は高いです。", kana: "にほんのくるまはたかいです。", en: "Japanese cars are expensive." }
+        ]
+    },
+    {
+        grammar: "[Noun]があります / います",
+        meaning: "There is... / to have...",
+        level: "N5",
+        explanation: "Used to express existence. 「あります」 (arimasu) is for inanimate objects (things), while 「います」 (imasu) is for animate objects (people, animals).",
+        examples: [
+            { jp: "机の上に猫がいます。", kana: "つくえのうえにねこがいます。", en: "There is a cat on the desk." },
+            { jp: "公園に木があります。", kana: "こうえんにきがあります。", en: "There are trees in the park." }
+        ]
+    },
+    {
+        grammar: "[Verb-stem]ませんか",
+        meaning: "Invitation: Won't you...?",
+        level: "N5",
+        explanation: "A polite way to invite someone to do something. It's formed by changing the 「～ます」 ending of a verb to 「～ませんか」.",
+        examples: [
+            { jp: "一緒に映画を見ませんか。", kana: "いっしょにえいがをみませんか。", en: "Won't you watch a movie with me?" },
+            { jp: "お茶を飲みませんか。", kana: "おちゃをのみませんか。", en: "Would you like to have some tea?" }
+        ]
+    },
+
+    // --- N4 Grammar Points ---
+    {
+        grammar: "[Verb-stem]たいです",
+        meaning: "Want to do [verb]",
+        level: "N4",
+        explanation: "Expresses the speaker's desire to perform an action. It's formed by replacing 「ます」 with 「たいです」. The resulting 「～たい」 form conjugates like an i-adjective.",
+        examples: [
+            { jp: "日本へ行きたいです。", kana: "にほんへいきたいです。", en: "I want to go to Japan." },
+            { jp: "寿司が食べたいです。", kana: "すしがたべたいです。", en: "I want to eat sushi." }
+        ]
+    },
+    {
+        grammar: "[Verb-た form]方がいい",
+        meaning: "It is better to...",
+        level: "N4",
+        explanation: "Used to give advice. The positive form uses the past tense (た-form), while the negative advice form uses the negative (ない-form) + 「方がいい」.",
+        examples: [
+            { jp: "もっと野菜を食べた方がいいですよ。", kana: "もっとやさいをたべたほうがいいですよ。", en: "You should eat more vegetables." },
+            { jp: "そんなにたくさんお酒を飲まない方がいいです。", kana: "そんなにたくさんおさけをのまないほうがいいです。", en: "It's better not to drink that much alcohol." }
+        ]
+    },
+    {
+        grammar: "～なければなりません",
+        meaning: "Must do...",
+        level: "N4",
+        explanation: "Expresses obligation or necessity. It's formed from the verb's negative nai-form. A more casual equivalent is 「～ないとだめ」 or 「～なくちゃ」.",
+        examples: [
+            { jp: "明日、早く起きなければなりません。", kana: "あした、はやくおきなければなりません。", en: "I must wake up early tomorrow." },
+            { jp: "薬を飲まなければなりません。", kana: "くすりをのまなければなりません。", en: "You must take the medicine." }
+        ]
+    },
+    {
+        grammar: "～なくてもいいです",
+        meaning: "Don't have to...",
+        level: "N4",
+        explanation: "Expresses a lack of necessity. It is formed by taking the negative nai-form, dropping the final 「い」, and adding 「～くてもいいです」.",
+        examples: [
+            { jp: "明日、学校へ来なくてもいいです。", kana: "あした、がっこうへこなくてもいいです。", en: "You don't have to come to school tomorrow." },
+            { jp: "靴を脱がなくてもいいです。", kana: "くつをぬがなくてもいいです。", en: "You don't have to take off your shoes." }
+        ]
+    },
+    {
+        grammar: "～ことができます",
+        meaning: "Can do...",
+        level: "N4",
+        explanation: "A formal way to express ability, an alternative to the potential verb form. It is formed by using the dictionary form of a verb followed by 「ことができます」.",
+        examples: [
+            { jp: "私は漢字を読むことができます。", kana: "わたしはかんじをよむことができます。", en: "I can read Kanji." },
+            { jp: "ここで写真を撮ることができますか。", kana: "ここでしゃしんをとることができますか。", en: "Can I take pictures here?" }
+        ]
+    },
+    {
+        grammar: "～ので",
+        meaning: "Because, since",
+        level: "N4",
+        explanation: "Indicates a reason or cause, similar to 「から」. 「ので」 is often perceived as slightly more polite and is used when the reason leads to a natural, expected result.",
+        examples: [
+            { jp: "今日は日曜日なので、銀行は休みです。", kana: "きょうはにちようなので、ぎんこうはやすみです。", en: "Because today is Sunday, the bank is closed." },
+            { jp: "電車が遅れたので、会議に遅刻しました。", kana: "でんしゃがおくれたので、かいぎにちこくしました。", en: "I was late for the meeting because the train was delayed." }
+        ]
+    }
+];
