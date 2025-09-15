@@ -9,13 +9,11 @@
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
     
     <style>
-        /* --- IMPROVEMENT: Added a keyframe animation for incorrect answers --- */
         @keyframes shake {
             0%, 100% { transform: translateX(0); }
             10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
             20%, 40%, 60%, 80% { transform: translateX(5px); }
         }
-
         :root {
             --bg-color: #f0f4f8;
             --card-color: #ffffff;
@@ -38,7 +36,6 @@
             padding: 1rem;
             box-sizing: border-box;
         }
-        /* --- IMPROVEMENT: Using <main> instead of <div> for better semantics --- */
         main {
             background-color: var(--card-color);
             border-radius: 16px;
@@ -55,9 +52,7 @@
             font-size: 2rem;
             margin-bottom: 1.5rem;
         }
-        .level-selector {
-            margin-bottom: 1.5rem;
-        }
+        .level-selector { margin-bottom: 1.5rem; }
         .level-selector label {
             color: var(--text-light);
             margin-right: 0.75rem;
@@ -110,7 +105,7 @@
         #answer-input.incorrect {
             border-color: var(--incorrect-color);
             background-color: #fef2f2;
-            animation: shake 0.5s ease-in-out; /* Added shake animation */
+            animation: shake 0.5s ease-in-out;
         }
         button {
             width: 100%;
@@ -123,9 +118,7 @@
             cursor: pointer;
             transition: background-color 0.2s, transform 0.1s;
         }
-        button:hover:not(:disabled) {
-            transform: translateY(-2px);
-        }
+        button:hover:not(:disabled) { transform: translateY(-2px); }
         #check-button { background-color: var(--primary-color); }
         #check-button:hover { background-color: var(--primary-hover); }
         #next-button { background-color: var(--correct-color); }
@@ -167,7 +160,6 @@
         }
         .hidden { display: none !important; }
 
-        /* Introduction Panel Specific Styling */
         #introduction-panel { text-align: left; }
         #introduction-panel h2 {
             font-size: 1.8rem; margin-bottom: 1rem;
@@ -203,8 +195,31 @@
             margin-top: 1.5rem;
             background-color: var(--correct-color);
         }
-        #introduction-panel #start-practice-button:hover {
-             background-color: #15803d;
+        #introduction-panel #start-practice-button:hover { background-color: #15803d; }
+
+        #introduction-panel .grammar-example {
+            background-color: rgba(0, 0, 0, 0.15);
+            border-left: 4px solid var(--correct-color);
+            padding: 1rem;
+            margin-top: 1rem;
+            border-radius: 0 8px 8px 0;
+        }
+        #introduction-panel .grammar-example p {
+            margin: 0.25rem 0;
+            color: white;
+        }
+        #introduction-panel .grammar-example .jp {
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+        #introduction-panel .grammar-example .kana {
+            font-size: 0.9rem;
+            color: #e2e8f0;
+        }
+        #introduction-panel .grammar-example .en {
+            font-size: 1rem;
+            font-style: italic;
+            color: #f1f5f9;
         }
     </style>
 </head>
@@ -212,12 +227,10 @@
 
     <main id="app-container">
         <h1>Conjugation Dojo</h1>
-
         <div class="level-selector">
             <label for="topic-select">Topic:</label>
             <select id="topic-select"></select>
         </div>
-
         <div id="introduction-panel" class="hidden">
             <h2 id="intro-title"></h2>
             <div id="intro-sections-container"></div>
@@ -227,24 +240,19 @@
             </div>
             <button id="start-practice-button" class="hidden">Start Practice</button>
         </div>
-
         <div class="card-panel">
             <p id="kana-display"></p>
             <p id="kanji-display"></p>
             <p id="form-display"></p>
             <p id="verb-type-display"></p>
         </div>
-
         <input type="text" id="answer-input" placeholder="Type Romaji here..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
-
         <button id="check-button">Check</button>
         <button id="next-button" class="hidden">Next</button>
-
         <div class="feedback-area" aria-live="polite">
             <p id="feedback-message"></p>
             <p id="correct-answer-display"></p>
         </div>
-
         <div class="progress-area">
             <div>
                 <p>Correct: <span id="correct-count">0</span></p>
@@ -255,56 +263,24 @@
     </main>
 
     <script src="data.js"></script>
+    
     <script>
-        // REFACTORED: The entire script is wrapped in a DOMContentLoaded listener
-        // for safety, ensuring all HTML elements are loaded before the script runs.
         document.addEventListener('DOMContentLoaded', () => {
-            
-            // --- REFACTORED: Simplified Romaji to Hiragana Conversion ---
             const wanakana = {
-                "a":"あ", "i":"い", "u":"う", "e":"え", "o":"お",
-                "ka":"か", "ki":"き", "ku":"く", "ke":"け", "ko":"こ",
-                "sa":"さ", "shi":"し", "su":"す", "se":"せ", "so":"そ",
-                "ta":"た", "chi":"ち", "tsu":"つ", "te":"て", "to":"と",
-                "na":"な", "ni":"に", "nu":"ぬ", "ne":"ね", "no":"の",
-                "ha":"は", "hi":"ひ", "fu":"ふ", "he":"へ", "ho":"ほ",
-                "ma":"ま", "mi":"み", "mu":"む", "me":"め", "mo":"も",
-                "ya":"や", "yu":"ゆ", "yo":"よ",
-                "ra":"ら", "ri":"り", "ru":"る", "re":"れ", "ro":"ろ",
-                "wa":"わ", "wo":"を", "n":"ん",
-                "ga":"が", "gi":"ぎ", "gu":"ぐ", "ge":"げ", "go":"ご",
-                "za":"ざ", "ji":"じ", "zu":"ず", "ze":"ぜ", "zo":"ぞ",
-                "da":"だ", "di":"ぢ", "du":"づ", "de":"で", "do":"ど",
-                "ba":"ば", "bi":"び", "bu":"ぶ", "be":"べ", "bo":"ぼ",
-                "pa":"ぱ", "pi":"ぴ", "pu":"ぷ", "pe":"ぺ", "po":"ぽ",
-                "kya":"きゃ", "kyu":"きゅ", "kyo":"きょ",
-                "sha":"しゃ", "shu":"しゅ", "sho":"しょ",
-                "cha":"ちゃ", "chu":"ちゅ", "cho":"ちょ",
-                "nya":"にゃ", "nyu":"にゅ", "nyo":"にょ",
-                "hya":"ひゃ", "hyu":"ひゅ", "hyo":"ひょ",
-                "mya":"みゃ", "myu":"みゅ", "myo":"みょ",
-                "rya":"りゃ", "ryu":"りゅ", "ryo":"りょ",
-                "gya":"ぎゃ", "gyu":"ぎゅ", "gyo":"ぎょ",
-                "ja":"じゃ", "ju":"じゅ", "jo":"じょ",
-                "bya":"びゃ", "byu":"びゅ", "byo":"びょ",
-                "pya":"ぴゃ", "pyu":"ぴゅ", "pyo":"ぴょ"
+                "a":"あ", "i":"い", "u":"う", "e":"え", "o":"お", "ka":"か", "ki":"き", "ku":"く", "ke":"け", "ko":"こ", "sa":"さ", "shi":"し", "su":"す", "se":"せ", "so":"そ", "ta":"た", "chi":"ち", "tsu":"つ", "te":"て", "to":"と", "na":"な", "ni":"に", "nu":"ぬ", "ne":"ね", "no":"の", "ha":"は", "hi":"ひ", "fu":"ふ", "he":"へ", "ho":"ほ", "ma":"ま", "mi":"み", "mu":"む", "me":"め", "mo":"も", "ya":"や", "yu":"ゆ", "yo":"よ", "ra":"ら", "ri":"り", "ru":"る", "re":"れ", "ro":"ろ", "wa":"わ", "wo":"を", "n":"ん", "ga":"が", "gi":"ぎ", "gu":"ぐ", "ge":"げ", "go":"ご", "za":"ざ", "ji":"じ", "zu":"ず", "ze":"ぜ", "zo":"ぞ", "da":"だ", "di":"ぢ", "du":"づ", "de":"で", "do":"ど", "ba":"ば", "bi":"び", "bu":"ぶ", "be":"べ", "bo":"ぼ", "pa":"ぱ", "pi":"ぴ", "pu":"ぷ", "pe":"ぺ", "po":"ぽ", "kya":"きゃ", "kyu":"きゅ", "kyo":"きょ", "sha":"しゃ", "shu":"しゅ", "sho":"しょ", "cha":"ちゃ", "chu":"ちゅ", "cho":"ちょ", "nya":"にゃ", "nyu":"にゅ", "nyo":"にょ", "hya":"ひゃ", "hyu":"ひゅ", "hyo":"ひょ", "mya":"みゃ", "myu":"みゅ", "myo":"みょ", "rya":"りゃ", "ryu":"りゅ", "ryo":"りょ", "gya":"ぎゃ", "gyu":"ぎゅ", "gyo":"ぎょ", "ja":"じゃ", "ju":"じゅ", "jo":"じょ", "bya":"びゃ", "byu":"びゅ", "byo":"びょ", "pya":"ぴゃ", "pyu":"ぴゅ", "pyo":"ぴょ"
             };
             
             function toHiragana(romaji) {
                 let hiragana = '';
                 let i = 0;
-                romaji = romaji.toLowerCase();
-
+                romaji = romaji.toLowerCase().replace(/n'/, 'n');
                 while (i < romaji.length) {
-                    // Handle double consonants (sokuon)
                     if (i + 1 < romaji.length && romaji[i] !== 'n' && romaji[i] === romaji[i+1]) {
                         hiragana += 'っ';
                         i++;
                         continue;
                     }
-                    
                     let found = false;
-                    // Check for 3-character romaji first
                     if (i + 2 < romaji.length) {
                         const threeChar = romaji.substring(i, i + 3);
                         if (wanakana[threeChar]) {
@@ -313,7 +289,6 @@
                             found = true;
                         }
                     }
-                    // Check for 2-character romaji
                     if (!found && i + 1 < romaji.length) {
                         const twoChar = romaji.substring(i, i + 2);
                         if (wanakana[twoChar]) {
@@ -322,23 +297,15 @@
                             found = true;
                         }
                     }
-                    // Check for 1-character romaji
                     if (!found) {
                         const oneChar = romaji[i];
-                        if (wanakana[oneChar]) {
-                            hiragana += wanakana[oneChar];
-                            i += 1;
-                        } else {
-                            // If character is not a valid romaji, just append it
-                            hiragana += oneChar;
-                            i += 1;
-                        }
+                        hiragana += wanakana[oneChar] || oneChar;
+                        i += 1;
                     }
                 }
                 return hiragana;
             }
 
-            // --- DOM ELEMENTS ---
             const dom = {
                 kanaDisplay: document.getElementById('kana-display'),
                 kanjiDisplay: document.getElementById('kanji-display'),
@@ -364,7 +331,6 @@
                 progressArea: document.querySelector('.progress-area')
             };
 
-            // --- STATE ---
             let state = {
                 learningQueue: [],
                 currentCard: null,
@@ -375,8 +341,6 @@
                 currentIntroSlideIndex: 0
             };
 
-            // --- FUNCTIONS ---
-            
             const saveState = () => localStorage.setItem('conjugationPracticeState', JSON.stringify(state));
             const updateCounts = () => {
                 dom.correctCount.textContent = state.correctCount;
@@ -387,8 +351,6 @@
                 const savedState = localStorage.getItem('conjugationPracticeState');
                 if (savedState) {
                     const loaded = JSON.parse(savedState);
-                    // Only load relevant state, don't overwrite entire object
-                    // to prevent issues if state structure changes in the future.
                     state.currentTopic = loaded.currentTopic || "masu";
                     state.correctCount = loaded.correctCount || 0;
                     state.incorrectCount = loaded.incorrectCount || 0;
@@ -400,81 +362,128 @@
             };
 
             const displayIntroductionUI = () => {
-                // ... (This function remains largely the same, but it's good practice
-                // to add checks to ensure elements exist before using them)
-                if (!dom.introPanel) return;
-                
-                // Hide practice elements
                 [dom.cardPanel, dom.answerInput, dom.checkButton, dom.nextButton, dom.feedbackArea, dom.progressArea]
                     .forEach(el => el.classList.add('hidden'));
 
-                // Show introduction elements
                 dom.introPanel.classList.remove('hidden');
-                dom.introSectionsContainer.innerHTML = ''; // Clear previous content
+                dom.introSectionsContainer.innerHTML = '';
 
-                const introContent = formIntroContent[state.currentTopic];
-                if (introContent && introContent.sections) {
-                    dom.introTitle.textContent = introContent.title;
-                    const section = introContent.sections[state.currentIntroSlideIndex];
-                    if (section) {
-                        // (The logic for building the intro content is unchanged)
-                        let html = `<h3>${section.heading}</h3>`;
-                        html += section.content.split('\n').map(line => {
-                            line = line.trim();
-                            if (line.startsWith('•')) {
-                                return `<ul><li>${line.substring(1).trim()}</li></ul>`;
-                            }
-                            return `<p>${line}</p>`;
-                        }).join('');
-                        dom.introSectionsContainer.innerHTML = html.replace(/<ul>\s*<\/ul>/g, '');
+                const topicKey = state.currentTopic;
+                const isGrammarTopic = topicKey.startsWith('grammar_');
+                
+                dom.prevIntroSlideButton.parentElement.style.display = isGrammarTopic ? 'none' : 'flex';
+                dom.startPracticeButton.classList.toggle('hidden', isGrammarTopic);
+
+                if (isGrammarTopic) {
+                    const grammarIndex = parseInt(topicKey.split('_')[1], 10);
+                    const grammarPoint = japaneseGrammar[grammarIndex];
+                    
+                    if (grammarPoint) {
+                        dom.introTitle.textContent = grammarPoint.grammar;
+                        let html = `<h3>${grammarPoint.meaning} (JLPT ${grammarPoint.level})</h3>`;
+                        html += `<p>${grammarPoint.explanation}</p>`;
+                        
+                        grammarPoint.examples.forEach(ex => {
+                            html += `
+                                <div class="grammar-example">
+                                    <p class="jp">${ex.jp}</p>
+                                    <p class="kana">${ex.kana}</p>
+                                    <p class="en">${ex.en}</p>
+                                </div>
+                            `;
+                        });
+                        dom.introSectionsContainer.innerHTML = html;
                     }
-
-                    const totalSlides = introContent.sections.length;
-                    dom.prevIntroSlideButton.disabled = state.currentIntroSlideIndex === 0;
-                    dom.nextIntroSlideButton.style.display = (state.currentIntroSlideIndex === totalSlides - 1) ? 'none' : 'block';
-                    dom.startPracticeButton.classList.toggle('hidden', state.currentIntroSlideIndex !== totalSlides - 1);
                 } else {
-                    dom.introTitle.textContent = "Practice Ready";
-                    dom.introSectionsContainer.innerHTML = `<p>No introduction for this topic. Click below to start!</p>`;
-                    dom.prevIntroSlideButton.disabled = true;
-                    dom.nextIntroSlideButton.style.display = 'none';
-                    dom.startPracticeButton.classList.remove('hidden');
+                    const introContent = formIntroContent[topicKey];
+                    if (introContent && introContent.sections) {
+                        dom.introTitle.textContent = introContent.title;
+                        const totalSlides = introContent.sections.length;
+                        const section = introContent.sections[state.currentIntroSlideIndex];
+                        if (section) {
+                            let html = `<h3>${section.heading}</h3>`;
+                             html += section.content.split('\n').map(line => {
+                                 line = line.trim();
+                                 if (line.startsWith('•')) {
+                                     return `<ul><li>${line.substring(1).trim().replace(/\* Example: (.*?) -> (.*?)/g, '<b>$1</b> &rarr; <b>$2</b>')}</li></ul>`;
+                                 }
+                                 return `<p>${line}</p>`;
+                             }).join('');
+                             dom.introSectionsContainer.innerHTML = html.replace(/<ul>\s*<\/ul>/g, '');
+                        }
+                        dom.prevIntroSlideButton.disabled = state.currentIntroSlideIndex === 0;
+                        dom.nextIntroSlideButton.style.display = (state.currentIntroSlideIndex === totalSlides - 1) ? 'none' : 'block';
+                        dom.startPracticeButton.classList.toggle('hidden', state.currentIntroSlideIndex !== totalSlides - 1);
+                    } else {
+                        startPractice();
+                    }
                 }
             };
             
             const displayPracticeUI = () => {
-                // Hide introduction elements
                 [dom.introPanel, dom.startPracticeButton].forEach(el => el.classList.add('hidden'));
-
-                // Show practice elements
                 [dom.cardPanel, dom.answerInput, dom.checkButton, dom.feedbackArea, dom.progressArea]
                     .forEach(el => el.classList.remove('hidden'));
 
-                // Reset for new card
                 dom.answerInput.value = '';
-                dom.answerInput.classList.remove('correct', 'incorrect');
+                dom.answerInput.className = '';
                 dom.feedbackMessage.textContent = '';
                 dom.correctAnswerDisplay.textContent = '';
                 dom.checkButton.classList.remove('hidden');
                 dom.nextButton.classList.add('hidden');
                 dom.answerInput.focus();
             };
-            
-            const generateNewPracticeSession = () => {
-                // ... (This function is unchanged)
+
+            const startPractice = () => {
+                state.currentMode = 'practice';
+                generateNewPracticeSession();
+                displayNextCard();
             };
-            
+
+            const generateNewPracticeSession = () => {
+                const formKey = state.currentTopic;
+                let wordPool = [];
+
+                const formInfo = conjugationForms.find(f => f.key === formKey);
+                if (!formInfo) return;
+
+                if (formInfo.display.includes('Adjective')) {
+                    const adjType = formInfo.display.includes('I-Adjective') ? 'i-adjective' : 'na-adjective';
+                    wordPool = japaneseAdjectives.filter(adj => adj.type.startsWith(adjType) && adj.conjugations[formKey]);
+                } else {
+                    wordPool = japaneseVerbs.filter(verb => verb.conjugations[formKey]);
+                }
+                
+                state.learningQueue = wordPool.map(item => ({ item, formKey }))
+                                              .sort(() => Math.random() - 0.5);
+            };
+
             const displayNextCard = () => {
-                // ... (This function is unchanged)
+                displayPracticeUI();
+                if (state.learningQueue.length === 0) {
+                    dom.kanaDisplay.textContent = "🎉";
+                    dom.kanjiDisplay.textContent = "Round Complete!";
+                    dom.formDisplay.textContent = "Select a new topic or reset.";
+                    dom.verbTypeDisplay.textContent = "";
+                    [dom.answerInput, dom.nextButton, dom.checkButton].forEach(el => el.classList.add('hidden'));
+                    return;
+                }
+
+                state.currentCard = state.learningQueue.shift();
+                const { item, formKey } = state.currentCard;
+                const formInfo = conjugationForms.find(f => f.key === formKey);
+
+                dom.kanaDisplay.textContent = item.kana;
+                dom.kanjiDisplay.textContent = item.word === item.kana ? '' : item.word;
+                dom.formDisplay.textContent = formInfo ? formInfo.display : '';
+                dom.verbTypeDisplay.textContent = item.type;
             };
 
             const checkAnswer = () => {
                 if (!state.currentCard) return;
 
-                // --- REFACTORED: Simplified answer checking logic ---
                 const userAnswerRomaji = dom.answerInput.value.trim();
                 const userAnswerHiragana = toHiragana(userAnswerRomaji);
-
                 const { item, formKey } = state.currentCard;
                 const correctAnswerHiragana = item.conjugations[formKey];
 
@@ -489,7 +498,6 @@
                     dom.answerInput.classList.add('incorrect');
                     dom.correctAnswerDisplay.textContent = `Correct: ${correctAnswerHiragana}`;
                     state.incorrectCount++;
-                    // Put incorrect card back in the queue to practice again
                     state.learningQueue.splice(Math.min(3, state.learningQueue.length), 0, state.currentCard);
                 }
 
@@ -497,11 +505,45 @@
                 saveState();
                 dom.checkButton.classList.add('hidden');
                 dom.nextButton.classList.remove('hidden');
+                dom.nextButton.focus();
+            };
+            
+            const populateTopicSelect = () => {
+                const createOption = (value, text) => {
+                    const option = document.createElement('option');
+                    option.value = value;
+                    option.textContent = text;
+                    return option;
+                };
+                const createOptgroup = (label) => {
+                    const group = document.createElement('optgroup');
+                    group.label = label;
+                    return group;
+                };
+
+                const conjugationsGroup = createOptgroup('Conjugations');
+                conjugationForms.forEach(form => {
+                    if (form.category !== 'Particles') {
+                         conjugationsGroup.appendChild(createOption(form.key, form.display));
+                    }
+                });
+                dom.topicSelect.appendChild(conjugationsGroup);
+
+                const grammarN5Group = createOptgroup('Grammar (N5)');
+                const grammarN4Group = createOptgroup('Grammar (N4)');
+                
+                japaneseGrammar.forEach((point, index) => {
+                    const option = createOption(`grammar_${index}`, point.grammar);
+                    if (point.level === "N5") {
+                        grammarN5Group.appendChild(option);
+                    } else if (point.level === "N4") {
+                        grammarN4Group.appendChild(option);
+                    }
+                });
+                dom.topicSelect.appendChild(grammarN5Group);
+                dom.topicSelect.appendChild(grammarN4Group);
             };
 
-            // --- EVENT LISTENERS ---
-            
-            // REFACTORED: Simplified input handling
             dom.answerInput.addEventListener('keydown', (e) => {
                 if (e.key === 'Enter') {
                     if (!dom.checkButton.classList.contains('hidden')) {
@@ -514,25 +556,51 @@
 
             dom.checkButton.addEventListener('click', checkAnswer);
             dom.nextButton.addEventListener('click', displayNextCard);
-            dom.startPracticeButton.addEventListener('click', () => {
-                state.currentMode = 'practice';
-                generateNewPracticeSession();
-                displayNextCard();
+            dom.startPracticeButton.addEventListener('click', startPractice);
+
+            dom.topicSelect.addEventListener('change', (e) => {
+                state.currentTopic = e.target.value;
+                state.currentMode = 'introduction';
+                state.currentIntroSlideIndex = 0;
+                displayIntroductionUI();
+                saveState();
             });
             
-            // (Other event listeners are unchanged)
+            dom.prevIntroSlideButton.addEventListener('click', () => {
+                if (state.currentIntroSlideIndex > 0) {
+                    state.currentIntroSlideIndex--;
+                    displayIntroductionUI();
+                }
+            });
 
-            // --- INITIALIZATION ---
-            // (Initialization logic is unchanged)
-            
-            // Initial load
+            dom.nextIntroSlideButton.addEventListener('click', () => {
+                const introContent = formIntroContent[state.currentTopic];
+                if (introContent && state.currentIntroSlideIndex < introContent.sections.length - 1) {
+                    state.currentIntroSlideIndex++;
+                    displayIntroductionUI();
+                }
+            });
+
+            dom.resetButton.addEventListener('click', () => {
+                if (confirm('Are you sure you want to reset your session scores?')) {
+                    state.correctCount = 0;
+                    state.incorrectCount = 0;
+                    updateCounts();
+                    saveState();
+                }
+            });
+
             populateTopicSelect();
             loadState();
-            if (state.currentMode === 'practice' && state.learningQueue.length > 0) {
-                 generateNewPracticeSession(); // Regenerate queue based on saved topic
-                 displayNextCard();
+            
+            const isPracticeTopic = formIntroContent.hasOwnProperty(state.currentTopic);
+
+            if (state.currentMode === 'practice' && isPracticeTopic && state.learningQueue.length > 0) {
+                generateNewPracticeSession(); 
+                displayNextCard();
             } else {
-                 displayIntroductionUI();
+                state.currentMode = 'introduction';
+                displayIntroductionUI();
             }
         });
     </script>
