@@ -151,55 +151,55 @@ const japaneseAdjectives = [
 
 const japaneseParticles = [
     { word: "は", kana: "は", meaning: "Topic Marker", type: "particle", conjugations: { meaning: "topic marker" },
-      fillInBlankExamples: [
+        fillInBlankExamples: [
         { sentence: "わたし＿がくせい です。", correctAnswer: "は", translation: "I am a student." },
         { sentence: "ねこ＿かわいい です。", correctAnswer: "は", translation: "The cat is cute." }
-      ]},
+        ]},
     { word: "が", kana: "が", meaning: "Subject Marker", type: "particle", conjugations: { meaning: "subject marker" },
-      fillInBlankExamples: [
+        fillInBlankExamples: [
         { sentence: "だれ＿きましたか。", correctAnswer: "が", translation: "Who came?" },
         { sentence: "いぬ＿います。", correctAnswer: "が", translation: "There is a dog." }
-      ]},
+        ]},
     { word: "を", kana: "を", meaning: "Direct Object Marker", type: "particle", conjugations: { meaning: "direct object marker" },
-      fillInBlankExamples: [
+        fillInBlankExamples: [
         { sentence: "パン＿たべます。", correctAnswer: "を", translation: "I eat bread." },
         { sentence: "えいが＿みます。", correctAnswer: "を", translation: "I watch a movie." }
-      ]},
+        ]},
     { word: "に", kana: "に", meaning: "Location/Direction/Time Marker", type: "particle", conjugations: { meaning: "location direction time marker" },
-      fillInBlankExamples: [
+        fillInBlankExamples: [
         { sentence: "とうきょう＿いきます。", correctAnswer: "に", translation: "I go to Tokyo." },
         { sentence: "７時＿おきます。", correctAnswer: "に", translation: "I wake up at 7 o'clock." }
-      ]},
+        ]},
     { word: "で", kana: "で", meaning: "Location of action/Means/Method", type: "particle", conjugations: { meaning: "location of action means method" },
-      fillInBlankExamples: [
+        fillInBlankExamples: [
         { sentence: "レストラン＿たべます。", correctAnswer: "で", translation: "I eat at the restaurant." },
         { sentence: "バス＿いきます。", correctAnswer: "で", translation: "I go by bus." }
-      ]},
+        ]},
     { word: "と", kana: "と", meaning: "And/With", type: "particle", conjugations: { meaning: "and with" },
-      fillInBlankExamples: [
+        fillInBlankExamples: [
         { sentence: "わたし＿ともだち。", correctAnswer: "と", translation: "I and my friend." },
         { sentence: "コーヒー＿パン。", correctAnswer: "と", translation: "Coffee and bread." }
-      ]},
+        ]},
     { word: "の", kana: "の", meaning: "Possessive/Noun modifier", type: "particle", conjugations: { meaning: "possessive noun modifier" },
-      fillInBlankExamples: [
+        fillInBlankExamples: [
         { sentence: "わたし＿ほん。", correctAnswer: "の", translation: "My book." },
         { sentence: "がっこう＿せんせい。", correctAnswer: "の", translation: "School's teacher (teacher of the school)." }
-      ]},
+        ]},
     { word: "へ", kana: "へ", meaning: "Directional (e)", type: "particle", conjugations: { meaning: "directional e" },
-      fillInBlankExamples: [
+        fillInBlankExamples: [
         { sentence: "がっこう＿いきます。", correctAnswer: "へ", translation: "I go towards school." },
         { sentence: "うち＿かえります。", correctAnswer: "へ", translation: "I return home." }
-      ]},
+        ]},
     { word: "も", kana: "も", meaning: "Also/Too", type: "particle", conjugations: { meaning: "also too" },
-      fillInBlankExamples: [
+        fillInBlankExamples: [
         { sentence: "わたし＿がくせいです。", correctAnswer: "も", translation: "I am also a student." },
         { sentence: "これ＿たべません。", correctAnswer: "も", translation: "I won't eat this either." }
-      ]},
+        ]},
     { word: "か", kana: "か", meaning: "Question Marker", type: "particle", conjugations: { meaning: "question marker" },
-      fillInBlankExamples: [
+        fillInBlankExamples: [
         { sentence: "これはペンです＿。", correctAnswer: "か", translation: "Is this a pen?" },
         { sentence: "ひらがなをわかります＿。", correctAnswer: "か", translation: "Do you understand Hiragana?" }
-      ]}
+        ]}
 ];
 
 const conjugationForms = [
@@ -224,9 +224,8 @@ const conjugationForms = [
     { key: "naAdjectiveNegative", display: "Na-Adjective Negative (じゃない)" },
     { key: "naAdjectivePast", display: "Na-Adjective Past (だった)" },
     { key: "naAdjectivePastNegative", display: "Na-Adjective Past Negative (じゃなかった)" },
-    // Particle forms
     { key: "meaning", display: "Meaning", category: "Particles" },
-    { key: "fillInBlank", display: "Fill in the Blank", category: "Particles" } // New fill-in-the-blank particle quiz
+    { key: "fillInBlank", display: "Fill in the Blank", category: "Particles" }
 ];
 
 const formIntroContent = {
@@ -401,7 +400,6 @@ const formIntroContent = {
     }
 };
 
-// --- NEW: JLPT N5 & N4 GRAMMAR SECTION ---
 const japaneseGrammar = [
     // --- N5 Grammar Points ---
     {
