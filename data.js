@@ -514,4 +514,510 @@ const japaneseGrammar = [
             { jp: "電車が遅れたので、会議に遅刻しました。", kana: "でんしゃがおくれたので、かいぎにちこくしました。", en: "I was late for the meeting because the train was delayed." }
         ]
     }
+    {
+        grammar: "AはBです",
+        meaning: "A is B.",
+        level: "N5",
+        explanation: "This is the most basic sentence structure. It equates one noun (A) with another (B). 「は」 (wa) is the topic marker, and 「です」 (desu) is the polite copula.",
+        examples: [
+            { jp: "私は学生です。", kana: "わたしはがくせいです。", en: "I am a student." },
+            { jp: "これは本です。", kana: "これはほんです。", en: "This is a book." }
+        ]
+    },
+    {
+        grammar: "～か",
+        meaning: "Question Marker",
+        level: "N5",
+        explanation: "Adding 「か」 (ka) to the end of a declarative sentence turns it into a question.",
+        examples: [
+            { jp: "あれはあなたの傘ですか。", kana: "あれはあなたのかさですか。", en: "Is that your umbrella?" },
+            { jp: "田中さんは日本人ですか。", kana: "たなかさんはにほんじんですか。", en: "Is Mr. Tanaka Japanese?" }
+        ]
+    },
+    {
+        grammar: "～の",
+        meaning: "Possessive Particle ('s)",
+        level: "N5",
+        explanation: "The particle 「の」 (no) connects two nouns. It primarily shows possession, but can also indicate origin or relationship.",
+        examples: [
+            { jp: "これは私のペンです。", kana: "これはわたしのペンです。", en: "This is my pen." },
+            { jp: "日本の車は高いです。", kana: "にほんのくるまはたかいです。", en: "Japanese cars are expensive." }
+        ]
+    },
+    {
+        grammar: "[Noun]があります / います",
+        meaning: "There is... / to have...",
+        level: "N5",
+        explanation: "Used to express existence. 「あります」 (arimasu) is for inanimate objects (things), while 「います」 (imasu) is for animate objects (people, animals).",
+        examples: [
+            { jp: "机の上に猫がいます。", kana: "つくえのうえにねこがいます。", en: "There is a cat on the desk." },
+            { jp: "公園に木があります。", kana: "こうえんにきがあります。", en: "There are trees in the park." }
+        ]
+    },
+    {
+        grammar: "[Verb-stem]ませんか",
+        meaning: "Invitation: Won't you...?",
+        level: "N5",
+        explanation: "A polite way to invite someone to do something. It's formed by changing the 「～ます」 ending of a verb to 「～ませんか」.",
+        examples: [
+            { jp: "一緒に映画を見ませんか。", kana: "いっしょにえいがをみませんか。", en: "Won't you watch a movie with me?" },
+            { jp: "お茶を飲みませんか。", kana: "おちゃをのみませんか。", en: "Would you like to have some tea?" }
+        ]
+    },
+    {
+        grammar: "～をください",
+        meaning: "Please give me...",
+        level: "N5",
+        explanation: "A simple and direct way to ask for something. It is used with a noun.",
+        examples: [
+            { jp: "水をください。", kana: "みずをください。", en: "Please give me water." },
+            { jp: "これをください。", kana: "これをください。", en: "Please give me this." }
+        ]
+    },
+    {
+        grammar: "[Verb-て]ください",
+        meaning: "Please do...",
+        level: "N5",
+        explanation: "Used to make a request or give an instruction politely. It attaches to the te-form of a verb.",
+        examples: [
+            { jp: "ここに名前を書いてください。", kana: "ここになまえをかいてください。", en: "Please write your name here." },
+            { jp: "静かにしてください。", kana: "しずかにしてください。", en: "Please be quiet." }
+        ]
+    },
+    {
+        grammar: "[Verb-て]います",
+        meaning: "Action in progress (-ing)",
+        level: "N5",
+        explanation: "Expresses an ongoing action, similar to the '-ing' form in English. It can also describe a continuing state (e.g., being married).",
+        examples: [
+            { jp: "今、音楽を聞いています。", kana: "いま、おんがくをきいています。", en: "I am listening to music now." },
+            { jp: "佐藤さんは東京に住んでいます。", kana: "さとうさんはとうきょうにすんでいます。", en: "Mr. Sato lives in Tokyo." }
+        ]
+    },
+    {
+        grammar: "あまり～ない",
+        meaning: "Not very...",
+        level: "N5",
+        explanation: "Used with a negative predicate to mean 'not much' or 'not very'. It softens the negative statement.",
+        examples: [
+            { jp: "この映画はあまり面白くないです。", kana: "このえいがはあまりおもしろくないです。", en: "This movie is not very interesting." },
+            { jp: "私はあまり肉を食べません。", kana: "わたしはあまりにくをたべません。", en: "I don't eat much meat." }
+        ]
+    },
+    {
+        grammar: "全然～ない",
+        meaning: "Not at all...",
+        level: "N5",
+        explanation: "Used with a negative predicate to strongly state that something is not the case at all.",
+        examples: [
+            { jp: "日本語が全然分かりません。", kana: "にほんごがぜんぜんわかりません。", en: "I don't understand Japanese at all." },
+            { jp: "大丈夫です、全然痛くないです。", kana: "だいじょうぶです、ぜんぜんいたくないです。", en: "It's okay, it doesn't hurt at all." }
+        ]
+    },
+    {
+        grammar: "～から～まで",
+        meaning: "From... until...",
+        level: "N5",
+        explanation: "Indicates a range, which can be for time, location, or other quantities.",
+        examples: [
+            { jp: "銀行は午前9時から午後3時までです。", kana: "ぎんこうはごぜん9じからごご3じまでです。", en: "The bank is open from 9 AM to 3 PM." },
+            { jp: "家から駅まで歩きます。", kana: "うちからえきまであるきます。", en: "I walk from my house to the station." }
+        ]
+    },
+    {
+        grammar: "～ましょうか",
+        meaning: "Shall I/we...?",
+        level: "N5",
+        explanation: "Used when offering to do something for the listener, or when making a suggestion and asking for agreement.",
+        examples: [
+            { jp: "窓を開けましょうか。", kana: "まどをあけましょうか。", en: "Shall I open the window?" },
+            { jp: "少し休みましょうか。", kana: "すこしやすみましょうか。", en: "Shall we take a little break?" }
+        ]
+    },
+    {
+        grammar: "[Adjective-くて]",
+        meaning: "Connecting i-adjectives",
+        level: "N5",
+        explanation: "To link two clauses where the first one ends in an i-adjective, change the final 「い」 to 「くて」.",
+        examples: [
+            { jp: "このカバンは安くて、便利です。", kana: "このかばんはやすくて、べんりです。", en: "This bag is cheap and convenient." },
+            { jp: "昨日は天気が良くて、暑かったです。", kana: "きのうはてんきがよくて、あつかったです。", en: "The weather was good and it was hot yesterday." }
+        ]
+    },
+    {
+        grammar: "[Noun/Na-Adjective]で",
+        meaning: "Connecting nouns/na-adjectives",
+        level: "N5",
+        explanation: "To link two clauses where the first one ends in a noun or na-adjective, add 「で」.",
+        examples: [
+            { jp: "彼は日本人で、先生です。", kana: "かれはにほんじんで、せんせいです。", en: "He is Japanese and a teacher." },
+            { jp: "この部屋はきれいで、静かです。", kana: "このへやはきれいで、しずかです。", en: "This room is clean and quiet." }
+        ]
+    },
+
+    // --- N4 Grammar Points ---
+    {
+        grammar: "[Verb-stem]たいです",
+        meaning: "Want to do [verb]",
+        level: "N4",
+        explanation: "Expresses the speaker's desire to perform an action. It's formed by replacing 「ます」 with 「たいです」. The resulting 「～たい」 form conjugates like an i-adjective.",
+        examples: [
+            { jp: "日本へ行きたいです。", kana: "にほんへいきたいです。", en: "I want to go to Japan." },
+            { jp: "寿司が食べたいです。", kana: "すしがたべたいです。", en: "I want to eat sushi." }
+        ]
+    },
+    {
+        grammar: "[Verb-た form]方がいい",
+        meaning: "It is better to...",
+        level: "N4",
+        explanation: "Used to give advice. The positive form uses the past tense (た-form), while the negative advice form uses the negative (ない-form) + 「方がいい」.",
+        examples: [
+            { jp: "もっと野菜を食べた方がいいですよ。", kana: "もっとやさいをたべたほうがいいですよ。", en: "You should eat more vegetables." },
+            { jp: "そんなにたくさんお酒を飲まない方がいいです。", kana: "そんなにたくさんおさけをのまないほうがいいです。", en: "It's better not to drink that much alcohol." }
+        ]
+    },
+    {
+        grammar: "～なければなりません",
+        meaning: "Must do...",
+        level: "N4",
+        explanation: "Expresses obligation or necessity. It's formed from the verb's negative nai-form. A more casual equivalent is 「～ないとだめ」 or 「～なくちゃ」.",
+        examples: [
+            { jp: "明日、早く起きなければなりません。", kana: "あした、はやくおきなければなりません。", en: "I must wake up early tomorrow." },
+            { jp: "薬を飲まなければなりません。", kana: "くすりをのまなければなりません。", en: "You must take the medicine." }
+        ]
+    },
+    {
+        grammar: "～なくてもいいです",
+        meaning: "Don't have to...",
+        level: "N4",
+        explanation: "Expresses a lack of necessity. It is formed by taking the negative nai-form, dropping the final 「い」, and adding 「～くてもいいです」.",
+        examples: [
+            { jp: "明日、学校へ来なくてもいいです。", kana: "あした、がっこうへこなくてもいいです。", en: "You don't have to come to school tomorrow." },
+            { jp: "靴を脱がなくてもいいです。", kana: "くつをぬがなくてもいいです。", en: "You don't have to take off your shoes." }
+        ]
+    },
+    {
+        grammar: "～ことができます",
+        meaning: "Can do...",
+        level: "N4",
+        explanation: "A formal way to express ability, an alternative to the potential verb form. It is formed by using the dictionary form of a verb followed by 「ことができます」.",
+        examples: [
+            { jp: "私は漢字を読むことができます。", kana: "わたしはかんじをよむことができます。", en: "I can read Kanji." },
+            { jp: "ここで写真を撮ることができますか。", kana: "ここでしゃしんをとることができますか。", en: "Can I take pictures here?" }
+        ]
+    },
+    {
+        grammar: "～ので",
+        meaning: "Because, since",
+        level: "N4",
+        explanation: "Indicates a reason or cause, similar to 「から」. 「ので」 is often perceived as slightly more polite and is used when the reason leads to a natural, expected result.",
+        examples: [
+            { jp: "今日は日曜日なので、銀行は休みです。", kana: "きょうはにちようなので、ぎんこうはやすみです。", en: "Because today is Sunday, the bank is closed." },
+            { jp: "電車が遅れたので、会議に遅刻しました。", kana: "でんしゃがおくれたので、かいぎにちこくしました。", en: "I was late for the meeting because the train was delayed." }
+        ]
+    },
+    {
+        grammar: "～かもしれません",
+        meaning: "Might, maybe",
+        level: "N4",
+        explanation: "Expresses possibility. It can be attached to the plain form of verbs, adjectives, and nouns.",
+        examples: [
+            { jp: "明日は雨が降るかもしれません。", kana: "あしたはあめがふるかもしれません。", en: "It might rain tomorrow." },
+            { jp: "彼はもう家に帰ったかもしれません。", kana: "かれはもういえにかえったかもしれません。", en: "He might have already gone home." }
+        ]
+    },
+    {
+        grammar: "AよりBのほうが～",
+        meaning: "B is more ~ than A",
+        level: "N4",
+        explanation: "Used for making comparisons between two items (A and B).",
+        examples: [
+            { jp: "電車よりバスの方が安いです。", kana: "でんしゃよりバスのほうがやすいです。", en: "The bus is cheaper than the train." },
+            { jp: "英語より日本語の方が難しいです。", kana: "えいごよりにほんごのほうがむずかしいです。", en: "Japanese is more difficult than English." }
+        ]
+    },
+    {
+        grammar: "[Dict. form]前に",
+        meaning: "Before doing...",
+        level: "N4",
+        explanation: "Indicates that one action takes place before another. It attaches to the dictionary form of the verb.",
+        examples: [
+            { jp: "寝る前に、本を読みます。", kana: "ねるまえに、ほんをよみます。", en: "I read a book before sleeping." },
+            { jp: "国へ帰る前に、お土産を買います。", kana: "くにへかえるまえに、おみやげをかいます。", en: "I will buy souvenirs before returning to my country." }
+        ]
+    },
+    {
+        grammar: "[Verb-た form]後で",
+        meaning: "After doing...",
+        level: "N4",
+        explanation: "Indicates that one action takes place after another. It attaches to the plain past (た) form of the verb.",
+        examples: [
+            { jp: "映画を見た後で、食事をしました。", kana: "えいがをみたあとで、しょくじをしました。", en: "We had a meal after watching the movie." },
+            { jp: "仕事が終わった後で、電話してください。", kana: "しごとがおわったあとで、でんわしてください。", en: "Please call me after you finish work." }
+        ]
+    },
+    {
+        grammar: "～たら",
+        meaning: "If, when",
+        level: "N4",
+        explanation: "A conditional form that attaches to the plain past (た) form. It can be used for a wide range of 'if' or 'when' scenarios.",
+        examples: [
+            { jp: "お金があったら、旅行したいです。", kana: "おかねがあったら、りょこうしたいです。", en: "If I had money, I'd want to travel." },
+            { jp: "日本へ行ったら、京都へ行きます。", kana: "にほんへいったら、きょうとへいきます。", en: "When I go to Japan, I will go to Kyoto." }
+        ]
+    },
+    {
+        grammar: "[Volitional]と思っています",
+        meaning: "Thinking of doing...",
+        level: "N4",
+        explanation: "Expresses an intention or plan that has been considered for some time. It is stronger than just the volitional form alone.",
+        examples: [
+            { jp: "週末は映画を見ようと思っています。", kana: "しuumatsuはえいがをみようとおもっています。", en: "I'm thinking of watching a movie this weekend." },
+            { jp: "来年、日本に留学しようと思っています。", kana: "らいねん、にほんにりゅうがくしようとおもっています。", en: "I'm thinking of studying abroad in Japan next year." }
+        ]
+    },
+    {
+        grammar: "[Verb-stem]やすい / にくい",
+        meaning: "Easy to do / Hard to do",
+        level: "N4",
+        explanation: "These suffixes attach to the verb stem (ます-form without ます) to describe the ease or difficulty of an action. They conjugate like i-adjectives.",
+        examples: [
+            { jp: "このペンはとても書きやすいです。", kana: "このペンはとてもかきやすいです。", en: "This pen is very easy to write with." },
+            { jp: "彼の名前は長くて、覚えにくいです。", kana: "かれのなまえはながくて、おぼえにくいです。", en: "His name is long and hard to remember." }
+        ]
+    },
+    {
+        grammar: "～そうです (appearance)",
+        meaning: "Looks like, seems",
+        level: "N4",
+        explanation: "Used to make a guess based on visual evidence. For i-adjectives, drop the final い. For na-adjectives and verbs (stem), just add そうです.",
+        examples: [
+            { jp: "このケーキは美味しそうです。", kana: "このケーキはおいしそうです。", en: "This cake looks delicious." },
+            { jp: "雨が降りそうですね。", kana: "あめがふりそうですね。", en: "It looks like it's going to rain." }
+        ]
+    },
+    {
+        grammar: "～のに",
+        meaning: "Even though, despite",
+        level: "N4",
+        explanation: "Connects two clauses where the second clause is an unexpected or contrary result of the first. It expresses a feeling of surprise or complaint.",
+        examples: [
+            { jp: "薬を飲んだのに、まだ頭が痛いです。", kana: "くすりをのんだのに、まだあたまがいたいです。", en: "Even though I took the medicine, my head still hurts." },
+            { jp: "今日は日曜日なのに、仕事をしなければなりません。", kana: "きょうはにちようなのに、しごとをしなければなりません。", en: "Even though it's Sunday, I have to work." }
+        ]
+    }
+    {
+        grammar: "AはBです",
+        meaning: "A is B.",
+        level: "N5",
+        explanation: "This is the most basic sentence structure. It equates one noun (A) with another (B). 「は」 (wa) is the topic marker, and 「です」 (desu) is the polite copula.",
+        examples: [
+            { jp: "私は学生です。", kana: "わたしはがくせいです。", en: "I am a student." },
+            { jp: "これは本です。", kana: "これはほんです。", en: "This is a book." }
+        ]
+    },
+    {
+        grammar: "～か",
+        meaning: "Question Marker",
+        level: "N5",
+        explanation: "Adding 「か」 (ka) to the end of a declarative sentence turns it into a question.",
+        examples: [
+            { jp: "あれはあなたの傘ですか。", kana: "あれはあなたのかさですか。", en: "Is that your umbrella?" },
+            { jp: "田中さんは日本人ですか。", kana: "たなかさんはにほんじんですか。", en: "Is Mr. Tanaka Japanese?" }
+        ]
+    },
+    {
+        grammar: "～の",
+        meaning: "Possessive Particle ('s)",
+        level: "N5",
+        explanation: "The particle 「の」 (no) connects two nouns. It primarily shows possession, but can also indicate origin or relationship.",
+        examples: [
+            { jp: "これは私のペンです。", kana: "これはわたしのペンです。", en: "This is my pen." },
+            { jp: "日本の車は高いです。", kana: "にほんのくるまはたかいです。", en: "Japanese cars are expensive." }
+        ]
+    },
+    {
+        grammar: "[Noun]があります / います",
+        meaning: "There is... / to have...",
+        level: "N5",
+        explanation: "Used to express existence. 「あります」 (arimasu) is for inanimate objects (things), while 「います」 (imasu) is for animate objects (people, animals).",
+        examples: [
+            { jp: "机の上に猫がいます。", kana: "つくえのうえにねこがいます。", en: "There is a cat on the desk." },
+            { jp: "公園に木があります。", kana: "こうえんにきがあります。", en: "There are trees in the park." }
+        ]
+    },
+    {
+        grammar: "[Verb-stem]ませんか",
+        meaning: "Invitation: Won't you...?",
+        level: "N5",
+        explanation: "A polite way to invite someone to do something. It's formed by changing the 「～ます」 ending of a verb to 「～ませんか」.",
+        examples: [
+            { jp: "一緒に映画を見ませんか。", kana: "いっしょにえいがをみませんか。", en: "Won't you watch a movie with me?" },
+            { jp: "お茶を飲みませんか。", kana: "おちゃをのみませんか。", en: "Would you like to have some tea?" }
+        ]
+    },
+
+    // --- N4 Grammar Points ---
+    {
+        grammar: "[Verb-stem]たいです",
+        meaning: "Want to do [verb]",
+        level: "N4",
+        explanation: "Expresses the speaker's desire to perform an action. It's formed by replacing 「ます」 with 「たいです」. The resulting 「～たい」 form conjugates like an i-adjective.",
+        examples: [
+            { jp: "日本へ行きたいです。", kana: "にほんへいきたいです。", en: "I want to go to Japan." },
+            { jp: "寿司が食べたいです。", kana: "すしがたべたいです。", en: "I want to eat sushi." }
+        ]
+    },
+    {
+        grammar: "[Verb-た form]方がいい",
+        meaning: "It is better to...",
+        level: "N4",
+        explanation: "Used to give advice. The positive form uses the past tense (た-form), while the negative advice form uses the negative (ない-form) + 「方がいい」.",
+        examples: [
+            { jp: "もっと野菜を食べた方がいいですよ。", kana: "もっとやさいをたべたほうがいいですよ。", en: "You should eat more vegetables." },
+            { jp: "そんなにたくさんお酒を飲まない方がいいです。", kana: "そんなにたくさんおさけをのまないほうがいいです。", en: "It's better not to drink that much alcohol." }
+        ]
+    },
+    {
+        grammar: "～なければなりません",
+        meaning: "Must do...",
+        level: "N4",
+        explanation: "Expresses obligation or necessity. It's formed from the verb's negative nai-form. A more casual equivalent is 「～ないとだめ」 or 「～なくちゃ」.",
+        examples: [
+            { jp: "明日、早く起きなければなりません。", kana: "あした、はやくおきなければなりません。", en: "I must wake up early tomorrow." },
+            { jp: "薬を飲まなければなりません。", kana: "くすりをのまなければなりません。", en: "You must take the medicine." }
+        ]
+    },
+    {
+        grammar: "～なくてもいいです",
+        meaning: "Don't have to...",
+        level: "N4",
+        explanation: "Expresses a lack of necessity. It is formed by taking the negative nai-form, dropping the final 「い」, and adding 「～くてもいいです」.",
+        examples: [
+            { jp: "明日、学校へ来なくてもいいです。", kana: "あした、がっこうへこなくてもいいです。", en: "You don't have to come to school tomorrow." },
+            { jp: "靴を脱がなくてもいいです。", kana: "くつをぬがなくてもいいです。", en: "You don't have to take off your shoes." }
+        ]
+    },
+    {
+        grammar: "～ことができます",
+        meaning: "Can do...",
+        level: "N4",
+        explanation: "A formal way to express ability, an alternative to the potential verb form. It is formed by using the dictionary form of a verb followed by 「ことができます」.",
+        examples: [
+            { jp: "私は漢字を読むことができます。", kana: "わたしはかんじをよむことができます。", en: "I can read Kanji." },
+            { jp: "ここで写真を撮ることができますか。", kana: "ここでしゃしんをとることができますか。", en: "Can I take pictures here?" }
+        ]
+    },
+    {
+        grammar: "～ので",
+        meaning: "Because, since",
+        level: "N4",
+        explanation: "Indicates a reason or cause, similar to 「から」. 「ので」 is often perceived as slightly more polite and is used when the reason leads to a natural, expected result.",
+        examples: [
+            { jp: "今日は日曜日なので、銀行は休みです。", kana: "きょうはにちようなので、ぎんこうはやすみです。", en: "Because today is Sunday, the bank is closed." },
+            { jp: "電車が遅れたので、会議に遅刻しました。", kana: "でんしゃがおくれたので、かいぎにちこくしました。", en: "I was late for the meeting because the train was delayed." }
+        ]
+    },
+    {
+        grammar: "～なら",
+        meaning: "If (contextual)",
+        level: "N4",
+        explanation: "A conditional used to offer a suggestion or information based on what the other person has just said. It has a nuance of 'if that's the case...' or 'speaking of...' and is attached to a noun or phrase.",
+        examples: [
+            { jp: "日本へ行くなら、京都がおすすめです。", kana: "にほんへいくなら、きょうとがおすすめです。", en: "If you're going to Japan, I recommend Kyoto." },
+            { jp: "車を運転するなら、お酒を飲んではいけません。", kana: "くるまをうんてんするなら、おさけをのんではいけません。", en: "If you're going to drive, you must not drink alcohol." }
+        ]
+    },
+    {
+        grammar: "[Verb-て]しまう",
+        meaning: "To do completely / regretfully",
+        level: "N4",
+        explanation: "This pattern has two main meanings: 1. To complete an action entirely. 2. To do something unintentionally or with a sense of regret. It's often shortened to 「～ちゃう」 or 「～じゃう」 in casual speech.",
+        examples: [
+            { jp: "この本は面白かったので、一日で読んでしまいました。", kana: "このほんはおもしろかったので、いちにちでよんでしまいました。", en: "This book was so interesting, I ended up reading it all in one day." },
+            { jp: "宿題を忘れてしまいました。", kana: "しゅくだいをわすれてしまいました。", en: "I completely forgot my homework (regretfully)." }
+        ]
+    },
+    {
+        grammar: "～と",
+        meaning: "When, if (natural consequence)",
+        level: "N4",
+        explanation: "A conditional used when A naturally or inevitably leads to B. It's often used for universal truths, machine operations, or giving directions.",
+        examples: [
+            { jp: "春になると、桜が咲きます。", kana: "はるになると、さくらがさきます。", en: "When spring comes, the cherry blossoms bloom." },
+            { jp: "このボタンを押すと、ドアが開きます。", kana: "このボタンをおすと、ドアがあきます。", en: "If you press this button, the door will open." }
+        ]
+    },
+    {
+        grammar: "[Verb-stem]ながら",
+        meaning: "While doing...",
+        level: "N4",
+        explanation: "Indicates that two actions are being performed simultaneously by the same person. The main action comes at the end of the sentence.",
+        examples: [
+            { jp: "音楽を聞きながら、勉強します。", kana: "おんがくをききながら、べんきょうします。", en: "I study while listening to music." },
+            { jp: "歩きながら話しましょう。", kana: "あるきながらはなしましょう。", en: "Let's talk while walking." }
+        ]
+    },
+    {
+        grammar: "～はずです",
+        meaning: "Is supposed to be, should be",
+        level: "N4",
+        explanation: "Expresses a strong expectation that something is true or will happen, based on logic or prior knowledge. It's stronger than 「でしょう」.",
+        examples: [
+            { jp: "田中さんは今日、来るはずです。", kana: "たなかさんはきょう、くるはずです。", en: "Mr. Tanaka is supposed to come today." },
+            { jp: "会議はもう終わったはずです。", kana: "かいぎはもうおわったはずです。", en: "The meeting should have finished by now." }
+        ]
+    },
+    {
+        grammar: "～そうです (hearsay)",
+        meaning: "I hear that...",
+        level: "N4",
+        explanation: "Used to report information you've heard from another source. It attaches to the plain form of verbs, adjectives, and nouns (with だ for nouns/na-adjectives).",
+        examples: [
+            { jp: "天気予報によると、明日は晴れるそうです。", kana: "てんきよほうによると、あしたははれるそうです。", en: "According to the weather forecast, I hear it will be sunny tomorrow." },
+            { jp: "山田さんは来月、結婚するそうです。", kana: "やまださんはらいげつ、けっこんするそうです。", en: "I heard that Mr. Yamada is getting married next month." }
+        ]
+    },
+    {
+        grammar: "[Dict. form]ことにする",
+        meaning: "To decide to do",
+        level: "N4",
+        explanation: "Indicates a decision made by the speaker on their own initiative.",
+        examples: [
+            { jp: "明日から、毎日ジョギングすることにします。", kana: "あしたから、まいにちジョギングすることにします。", en: "I've decided to start jogging every day from tomorrow." },
+            { jp: "お酒を飲むのをやめることにしました。", kana: "おさけをのむのをやめることにしました。", en: "I have decided to quit drinking alcohol." }
+        ]
+    },
+    {
+        grammar: "[Verb]ところです",
+        meaning: "About to / in the middle of / just did",
+        level: "N4",
+        explanation: "Expresses the specific point in time an action is at. 「[Dict. form] + ところです」 (about to do). 「[て-form]いる + ところです」 (in the middle of doing). 「[た-form] + ところです」 (just finished doing).",
+        examples: [
+            { jp: "今から昼ご飯を食べるところです。", kana: "いまからひるごはんをたべるところです。", en: "I am just about to eat lunch now." },
+            { jp: "すみません、今、会議をしているところです。", kana: "すみません、いま、かいぎをしているところです。", en: "Sorry, I'm in a meeting right now." },
+            { jp: "たった今、駅に着いたところです。", kana: "たったいま、えきについたところです。", en: "I have just arrived at the station." }
+        ]
+    },
+    {
+        grammar: "[Verb-stem]すぎる",
+        meaning: "To do too much",
+        level: "N4",
+        explanation: "Indicates excess. It attaches to the verb stem, or to i/na-adjective stems (dropping い/な). The resulting verb is a ru-verb.",
+        examples: [
+            { jp: "昨日の夜、食べすぎました。", kana: "きのうのよる、たべすぎました。", en: "I ate too much last night." },
+            { jp: "この問題は難しすぎます。", kana: "このもんだいはむずかしすぎます。", en: "This problem is too difficult." }
+        ]
+    },
+    {
+        grammar: "～てあげる/くれる/もらう",
+        meaning: "Giving/receiving actions",
+        level: "N4",
+        explanation: "These verbs are used when the 'item' being given is an action. 「あげる」: I do for others. 「くれる」: Others do for me. 「もらう」: I receive a favor from others.",
+        examples: [
+            { jp: "私は妹に宿題を教えてあげました。", kana: "わたしはいもうとにしゅくだいをおしえてあげました。", en: "I taught my little sister her homework (favor)." },
+            { jp: "友達が私にプレゼントをくれました。", kana: "ともだちがわたしにプレゼントをくれました。", en: "My friend gave me a present." },
+            { jp: "私は先生に作文を直してもらいました。", kana: "わたしはせんせいにさくぶんをなおしてもらいました。", en: "I had my teacher correct my essay (received favor)." }
+        ]
+    }
 ];
