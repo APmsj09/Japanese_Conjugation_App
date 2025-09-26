@@ -266,6 +266,12 @@
     
     <script>
         document.addEventListener('DOMContentLoaded', () => {
+            // Data loading check
+            if (typeof japaneseVerbs === 'undefined' || typeof conjugationForms === 'undefined' || typeof japaneseGrammar === 'undefined') {
+                document.getElementById('app-container').innerHTML = '<h1>Error</h1><p>Could not load necessary data. Please check your internet connection and refresh the page.</p>';
+                return; // Stop the script from running further
+            }
+
             const wanakana = {
                 "a":"あ", "i":"い", "u":"う", "e":"え", "o":"お", "ka":"か", "ki":"き", "ku":"く", "ke":"け", "ko":"こ", "sa":"さ", "shi":"し", "su":"す", "se":"せ", "so":"そ", "ta":"た", "chi":"ち", "tsu":"つ", "te":"て", "to":"と", "na":"な", "ni":"に", "nu":"ぬ", "ne":"ね", "no":"の", "ha":"は", "hi":"ひ", "fu":"ふ", "he":"へ", "ho":"ほ", "ma":"ま", "mi":"み", "mu":"む", "me":"め", "mo":"も", "ya":"や", "yu":"ゆ", "yo":"よ", "ra":"ら", "ri":"り", "ru":"る", "re":"れ", "ro":"ろ", "wa":"わ", "wo":"を", "n":"ん", "ga":"が", "gi":"ぎ", "gu":"ぐ", "ge":"げ", "go":"ご", "za":"ざ", "ji":"じ", "zu":"ず", "ze":"ぜ", "zo":"ぞ", "da":"だ", "di":"ぢ", "du":"づ", "de":"で", "do":"ど", "ba":"ば", "bi":"び", "bu":"ぶ", "be":"べ", "bo":"ぼ", "pa":"ぱ", "pi":"ぴ", "pu":"ぷ", "pe":"ぺ", "po":"ぽ", "kya":"きゃ", "kyu":"きゅ", "kyo":"きょ", "sha":"しゃ", "shu":"しゅ", "sho":"しょ", "cha":"ちゃ", "chu":"ちゅ", "cho":"ちょ", "nya":"にゃ", "nyu":"にゅ", "nyo":"にょ", "hya":"ひゃ", "hyu":"ひゅ", "hyo":"ひょ", "mya":"みゃ", "myu":"みゅ", "myo":"みょ", "rya":"りゃ", "ryu":"りゅ", "ryo":"りょ", "gya":"ぎゃ", "gyu":"ぎゅ", "gyo":"ぎょ", "ja":"じゃ", "ju":"じゅ", "jo":"じょ", "bya":"びゃ", "byu":"びゅ", "byo":"びょ", "pya":"ぴゃ", "pyu":"ぴゅ", "pyo":"ぴょ"
             };
@@ -273,14 +279,19 @@
             function toHiragana(romaji) {
                 let hiragana = '';
                 let i = 0;
-                romaji = romaji.toLowerCase().replace(/n'/, 'n');
+                // Refined romaji cleaning
+                romaji = romaji.toLowerCase()
+                               .replace(/n'/, 'n')
+                               .replace(/tchi/g, 'cchi'); // Handle edge case like 'matcha'
                 while (i < romaji.length) {
+                    // Handle double consonants (sokuon)
                     if (i + 1 < romaji.length && romaji[i] !== 'n' && romaji[i] === romaji[i+1]) {
                         hiragana += 'っ';
                         i++;
                         continue;
                     }
                     let found = false;
+                    // Check for 3-character kana
                     if (i + 2 < romaji.length) {
                         const threeChar = romaji.substring(i, i + 3);
                         if (wanakana[threeChar]) {
@@ -289,6 +300,7 @@
                             found = true;
                         }
                     }
+                    // Check for 2-character kana
                     if (!found && i + 1 < romaji.length) {
                         const twoChar = romaji.substring(i, i + 2);
                         if (wanakana[twoChar]) {
@@ -297,6 +309,7 @@
                             found = true;
                         }
                     }
+                    // Handle 1-character kana
                     if (!found) {
                         const oneChar = romaji[i];
                         hiragana += wanakana[oneChar] || oneChar;
@@ -341,7 +354,14 @@
                 currentIntroSlideIndex: 0
             };
 
-            const saveState = () => localStorage.setItem('conjugationPracticeState', JSON.stringify(state));
+            const saveState = () => {
+                const stateToSave = { ...state };
+                // Don't save the queue if not in practice mode to avoid stale queues
+                if (state.currentMode !== 'practice') {
+                    stateToSave.learningQueue = [];
+                }
+                localStorage.setItem('conjugationPracticeState', JSON.stringify(stateToSave));
+            };
             const updateCounts = () => {
                 dom.correctCount.textContent = state.correctCount;
                 dom.incorrectCount.textContent = state.incorrectCount;
@@ -354,6 +374,7 @@
                     state.currentTopic = loaded.currentTopic || "masu";
                     state.correctCount = loaded.correctCount || 0;
                     state.incorrectCount = loaded.incorrectCount || 0;
+                    state.learningQueue = loaded.learningQueue || []; // Load the practice queue
                     state.currentMode = loaded.currentMode || "introduction";
                     state.currentIntroSlideIndex = loaded.currentIntroSlideIndex || 0;
                 }
@@ -371,7 +392,9 @@
                 const topicKey = state.currentTopic;
                 const isGrammarTopic = topicKey.startsWith('grammar_');
                 
+                // Hide nav buttons for grammar, show for conjugations
                 dom.prevIntroSlideButton.parentElement.style.display = isGrammarTopic ? 'none' : 'flex';
+                // Always hide start practice button initially for grammar topics
                 dom.startPracticeButton.classList.toggle('hidden', isGrammarTopic);
 
                 if (isGrammarTopic) {
@@ -415,6 +438,7 @@
                         dom.nextIntroSlideButton.style.display = (state.currentIntroSlideIndex === totalSlides - 1) ? 'none' : 'block';
                         dom.startPracticeButton.classList.toggle('hidden', state.currentIntroSlideIndex !== totalSlides - 1);
                     } else {
+                        // If no intro content, go straight to practice
                         startPractice();
                     }
                 }
@@ -498,6 +522,7 @@
                     dom.answerInput.classList.add('incorrect');
                     dom.correctAnswerDisplay.textContent = `Correct: ${correctAnswerHiragana}`;
                     state.incorrectCount++;
+                    // Put the incorrect card back in the queue to practice again soon
                     state.learningQueue.splice(Math.min(3, state.learningQueue.length), 0, state.currentCard);
                 }
 
@@ -544,6 +569,7 @@
                 dom.topicSelect.appendChild(grammarN4Group);
             };
 
+            // --- Event Listeners ---
             dom.answerInput.addEventListener('keydown', (e) => {
                 if (e.key === 'Enter') {
                     if (!dom.checkButton.classList.contains('hidden')) {
@@ -590,15 +616,16 @@
                 }
             });
 
+            // --- Initial Load ---
             populateTopicSelect();
             loadState();
             
-            const isPracticeTopic = formIntroContent.hasOwnProperty(state.currentTopic);
-
-            if (state.currentMode === 'practice' && isPracticeTopic && state.learningQueue.length > 0) {
-                generateNewPracticeSession(); 
+            // On page load, decide whether to continue a practice session or show the introduction
+            if (state.currentMode === 'practice' && state.learningQueue.length > 0) {
+                // If a practice session was saved, jump right back into it
                 displayNextCard();
             } else {
+                // Otherwise, show the introduction for the current topic
                 state.currentMode = 'introduction';
                 displayIntroductionUI();
             }
