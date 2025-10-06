@@ -5,7 +5,48 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Japanese Conjugation Dojo</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect"             function toHiragana(romaji) {
+                let hiragana = '';
+                let i = 0;
+                // Refined romaji cleaning
+                romaji = romaji.toLowerCase()
+                               .replace(/n'/, 'n')
+                               .replace(/tchi/g, 'cchi'); // Handle edge case like 'matcha'
+                while (i < romaji.length) {
+                    // Handle double consonants (sokuon)
+                    if (i + 1 < romaji.length && romaji[i] !== 'n' && romaji[i] === romaji[i+1]) {
+                        hiragana += 'っ';
+                        i++;
+                        continue;
+                    }
+                    let found = false;
+                    // Check for 3-character kana
+                    if (i + 2 < romaji.length) {
+                        const threeChar = romaji.substring(i, i + 3);
+                        if (wanakana[threeChar]) {
+                            hiragana += wanakana[threeChar];
+                            i += 3;
+                            found = true;
+                        }
+                    }
+                    // Check for 2-character kana
+                    if (!found && i + 1 < romaji.length) {
+                        const twoChar = romaji.substring(i, i + 2);
+                        if (wanakana[twoChar]) {
+                            hiragana += wanakana[twoChar];
+                            i += 2;
+                            found = true;
+                        }
+                    }
+                    // Handle 1-character kana
+                    if (!found) {
+                        const oneChar = romaji[i];
+                        hiragana += wanakana[oneChar] || oneChar;
+                        i += 1;
+                    }
+                }
+                return hiragana;
+            }tps://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
     
     <style>
@@ -262,7 +303,7 @@
         </div>
     </main>
 
-    <script src="https://raw.githubusercontent.com/APmsj09/Japanese_Conjugation_App/refs/heads/main/data.js"></script>
+    <script src="data.js"></script>
     
     <script>
         document.addEventListener('DOMContentLoaded', () => {
