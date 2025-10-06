@@ -1,3 +1,9 @@
+// Global variables
+let dom = {};
+let selectedSection = 'verbs';
+let conjugationFormsList;
+let menuItems;
+
 document.addEventListener('DOMContentLoaded', () => {
     console.log('App initializing...');
     
@@ -18,10 +24,11 @@ document.addEventListener('DOMContentLoaded', () => {
         profileList: !!profileList
     });
 
-    // Initialize main app elements
-    const menuItems = document.querySelectorAll('.menu-item');
-    const conjugationFormsList = document.querySelector('.conjugation-forms');
+    // Declare app-wide variables
     let selectedSection = 'verbs'; // Default section
+    let conjugationFormsList;
+    let menuItems;
+    let dom = {}; // Initialize dom object
     
     // Profile management functions
     const showSection = (sectionId) => {
@@ -182,10 +189,38 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Initialize main app
     const initializeApp = () => {
-        // Initialize sidebar elements
-        const menuItems = document.querySelectorAll('.menu-item');
-        // Use the outer conjugationFormsList variable instead of redeclaring it
-        let selectedSection = 'verbs'; // Default section
+        console.log('Initializing app...');
+        
+        // Initialize main app elements
+        menuItems = document.querySelectorAll('.menu-item');
+        conjugationFormsList = document.querySelector('.conjugation-forms');
+        selectedSection = 'verbs'; // Default section
+        
+        // Initialize DOM elements
+        dom = {
+            kanaDisplay: document.getElementById('kana-display'),
+            kanjiDisplay: document.getElementById('kanji-display'),
+            formDisplay: document.getElementById('form-display'),
+            verbTypeDisplay: document.getElementById('verb-type-display'),
+            answerInput: document.getElementById('answer-input'),
+            checkButton: document.getElementById('check-button'),
+            nextButton: document.getElementById('next-button'),
+            feedbackMessage: document.getElementById('feedback-message'),
+            correctAnswerDisplay: document.getElementById('correct-answer-display'),
+            correctCount: document.getElementById('correct-count'),
+            incorrectCount: document.getElementById('incorrect-count'),
+            resetButton: document.getElementById('reset-button'),
+            topicSelect: document.getElementById('topic-select'),
+            introPanel: document.getElementById('introduction-panel'),
+            introTitle: document.getElementById('intro-title'),
+            introSectionsContainer: document.getElementById('intro-sections-container'),
+            startPracticeButton: document.getElementById('start-practice-button'),
+            prevIntroSlideButton: document.getElementById('prev-intro-slide-button'),
+            nextIntroSlideButton: document.getElementById('next-intro-slide-button'),
+            cardPanel: document.querySelector('.card-panel'),
+            feedbackArea: document.querySelector('.feedback-area'),
+            progressArea: document.querySelector('.progress-area')
+        };
 
     // Data loading check with detailed error reporting
     console.log('Debug: Loading data structures...');
@@ -268,30 +303,7 @@ document.addEventListener('DOMContentLoaded', () => {
         return hiragana;
     }
 
-    const dom = {
-        kanaDisplay: document.getElementById('kana-display'),
-        kanjiDisplay: document.getElementById('kanji-display'),
-        formDisplay: document.getElementById('form-display'),
-        verbTypeDisplay: document.getElementById('verb-type-display'),
-        answerInput: document.getElementById('answer-input'),
-        checkButton: document.getElementById('check-button'),
-        nextButton: document.getElementById('next-button'),
-        feedbackMessage: document.getElementById('feedback-message'),
-        correctAnswerDisplay: document.getElementById('correct-answer-display'),
-        correctCount: document.getElementById('correct-count'),
-        incorrectCount: document.getElementById('incorrect-count'),
-        resetButton: document.getElementById('reset-button'),
-        topicSelect: document.getElementById('topic-select'),
-        introPanel: document.getElementById('introduction-panel'),
-        introTitle: document.getElementById('intro-title'),
-        introSectionsContainer: document.getElementById('intro-sections-container'),
-        startPracticeButton: document.getElementById('start-practice-button'),
-        prevIntroSlideButton: document.getElementById('prev-intro-slide-button'),
-        nextIntroSlideButton: document.getElementById('next-intro-slide-button'),
-        cardPanel: document.querySelector('.card-panel'),
-        feedbackArea: document.querySelector('.feedback-area'),
-        progressArea: document.querySelector('.progress-area')
-    };
+    // DOM elements are now initialized in initializeApp()
 
     let state = {
         learningQueue: [],
