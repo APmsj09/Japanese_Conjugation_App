@@ -1,6 +1,6 @@
 // Global variables and state
-const conjugationFormsList;
-const menuItems;
+let conjugationFormsList = null;
+let menuItems = null;
 
 // Initialize main app
 const initializeApp = () => {
@@ -35,7 +35,7 @@ const initializeApp = () => {
         cardPanel: document.querySelector('.card-panel'),
         feedbackArea: document.querySelector('.feedback-area'),
         progressArea: document.querySelector('.progress-area')
-    };
+    });
 
     // Set up sidebar
     setupSidebar();
@@ -410,7 +410,7 @@ document.addEventListener('DOMContentLoaded', () => {
         selectedSection = 'verbs'; // Default section
         
         // Initialize DOM elements
-        dom = {
+        Object.assign(dom, {
             kanaDisplay: document.getElementById('kana-display'),
             kanjiDisplay: document.getElementById('kanji-display'),
             formDisplay: document.getElementById('form-display'),
@@ -433,7 +433,7 @@ document.addEventListener('DOMContentLoaded', () => {
             cardPanel: document.querySelector('.card-panel'),
             feedbackArea: document.querySelector('.feedback-area'),
             progressArea: document.querySelector('.progress-area')
-        };
+        });
 
     // Data loading check with detailed error reporting
     console.log('Debug: Loading data structures...');
