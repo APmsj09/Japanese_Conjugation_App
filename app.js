@@ -1,5 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
     // Data loading check with detailed error reporting
+    console.log('Debug: Loading data structures...');
     const requiredData = {
         japaneseVerbs,
         japaneseAdjectives,
@@ -8,6 +9,12 @@ document.addEventListener('DOMContentLoaded', () => {
         japaneseParticles,
         formIntroContent
     };
+    console.log('Debug: Required data structures:', Object.keys(requiredData).map(key => ({
+        name: key,
+        loaded: typeof requiredData[key] !== 'undefined',
+        type: typeof requiredData[key],
+        length: Array.isArray(requiredData[key]) ? requiredData[key].length : null
+    })));
 
     const missingData = Object.entries(requiredData)
         .filter(([key, value]) => typeof value === 'undefined')
