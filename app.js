@@ -1,4 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
+    console.log('App initializing...');
+    
     // Initialize welcome screen elements
     const welcomeScreen = document.getElementById('welcome-screen');
     const mainApp = document.getElementById('main-app');
@@ -7,6 +9,15 @@ document.addEventListener('DOMContentLoaded', () => {
     const profileForm = document.getElementById('profile-form');
     const profileList = document.getElementById('profile-list');
     
+    console.log('Welcome screen elements:', {
+        welcomeScreen: !!welcomeScreen,
+        mainApp: !!mainApp,
+        newProfileBtn: !!newProfileBtn,
+        loadProfileBtn: !!loadProfileBtn,
+        profileForm: !!profileForm,
+        profileList: !!profileList
+    });
+
     // Initialize main app elements
     const menuItems = document.querySelectorAll('.menu-item');
     const conjugationFormsList = document.querySelector('.conjugation-forms');
@@ -14,31 +25,52 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Profile management functions
     const showSection = (sectionId) => {
+        console.log('Showing section:', sectionId);
         document.querySelectorAll('.welcome-section').forEach(section => {
             section.classList.remove('active');
         });
-        document.getElementById(sectionId).classList.add('active');
+        const targetSection = document.getElementById(sectionId);
+        if (targetSection) {
+            targetSection.classList.add('active');
+            console.log('Section activated:', sectionId);
+        } else {
+            console.error('Could not find section:', sectionId);
+        }
     };
 
     const createNewProfile = (profileData) => {
-        // Initialize a new profile
-        userProgress.updateProfile({
-            username: profileData.username,
-            level: 1,
-            totalExp: 0,
-            joinDate: new Date().toISOString(),
-            settings: {
-                dailyGoal: parseInt(profileData.dailyGoal),
-                studyLevel: profileData.level
+        console.log('Creating new profile with data:', profileData);
+        
+        try {
+            // Initialize a new profile
+            userProgress.updateProfile({
+                username: profileData.username,
+                level: 1,
+                totalExp: 0,
+                joinDate: new Date().toISOString(),
+                settings: {
+                    dailyGoal: parseInt(profileData.dailyGoal),
+                    studyLevel: profileData.level
+                }
+            });
+            
+            console.log('Profile data saved');
+            
+            // Hide welcome screen and show main app
+            if (welcomeScreen && mainApp) {
+                welcomeScreen.classList.add('hidden');
+                mainApp.classList.remove('hidden');
+                console.log('Switched from welcome screen to main app');
+            } else {
+                console.error('Could not find welcome screen or main app elements');
             }
-        });
-        
-        // Hide welcome screen and show main app
-        welcomeScreen.classList.add('hidden');
-        mainApp.classList.remove('hidden');
-        
-        // Initialize the app
-        initializeApp();
+            
+            // Initialize the app
+            initializeApp();
+        } catch (error) {
+            console.error('Error in createNewProfile:', error);
+            throw error;
+        }
     };
 
     const loadExistingProfile = () => {
@@ -53,8 +85,23 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     // Event Listeners for Welcome Screen
-    newProfileBtn.addEventListener('click', () => showSection('create-profile'));
-    loadProfileBtn.addEventListener('click', () => showSection('load-profile'));
+    if (newProfileBtn) {
+        newProfileBtn.addEventListener('click', () => {
+            console.log('New profile button clicked');
+            showSection('create-profile');
+        });
+    } else {
+        console.error('New profile button not found');
+    }
+
+    if (loadProfileBtn) {
+        loadProfileBtn.addEventListener('click', () => {
+            console.log('Load profile button clicked');
+            showSection('load-profile');
+        });
+    } else {
+        console.error('Load profile button not found');
+    }
 
     // Handle level and goal button selections
     document.querySelectorAll('.level-btn').forEach(btn => {
@@ -72,14 +119,32 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Handle profile form submission
-    profileForm.addEventListener('submit', (e) => {
-        e.preventDefault();
-        const username = document.getElementById('username').value;
-        const level = document.querySelector('.level-btn.selected')?.dataset.level || 'beginner';
-        const dailyGoal = document.querySelector('.goal-btn.selected')?.dataset.goal || '20';
-        
-        createNewProfile({ username, level, dailyGoal });
-    });
+    if (profileForm) {
+        profileForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            console.log('Profile form submitted');
+            
+            const username = document.getElementById('username')?.value;
+            const level = document.querySelector('.level-btn.selected')?.dataset.level || 'beginner';
+            const dailyGoal = document.querySelector('.goal-btn.selected')?.dataset.goal || '20';
+            
+            console.log('Profile data:', { username, level, dailyGoal });
+
+            if (!username) {
+                console.error('Username is required');
+                return;
+            }
+
+            try {
+                createNewProfile({ username, level, dailyGoal });
+                console.log('Profile created successfully');
+            } catch (error) {
+                console.error('Error creating profile:', error);
+            }
+        });
+    } else {
+        console.error('Profile form not found');
+    }
 
     // Check for existing profile
     if (userProgress.getProgress().profile.username) {
