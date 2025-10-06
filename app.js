@@ -68,9 +68,13 @@ function createNewProfile(profileData) {
 function loadExistingProfile() {
     const profile = userProgress.getProgress().profile;
     if (profile && profile.username) {
-        window.app.welcomeScreen.classList.add('hidden');
-        window.app.mainApp.classList.remove('hidden');
-        setTimeout(initializeApp, 0);
+        if (window.app.welcomeScreen && window.app.mainApp) {
+            window.app.welcomeScreen.classList.add('hidden');
+            window.app.mainApp.classList.remove('hidden');
+            setTimeout(initializeApp, 0);
+        } else {
+            console.error('Welcome screen elements not found');
+        }
     } else {
         showSection('profile-selection');
     }
@@ -682,13 +686,41 @@ function toHiragana(romaji) {
 }
 
 // Check for existing profile and initialize app
-document.addEventListener('DOMContentLoaded', () => {
-    // Initialize app elements first
-    window.app.welcomeScreen = document.getElementById('welcome-screen');
-    window.app.mainApp = document.getElementById('main-app');
+document.addEventListener('DOMContentLoaded', async () => {
+    // First, fetch and inject the welcome screen HTML
+    try {
+        const response = await fetch('welcome.html');
+        const welcomeHTML = await response.text();
+        document.getElementById('app-container').innerHTML = welcomeHTML;
+        
+        // Now initialize app elements
+        window.app.welcomeScreen = document.getElementById('welcome-screen');
+        window.app.mainApp = document.getElementById('main-app');
+        
+        // Initialize other welcome screen elements
+        window.app.newProfileBtn = document.getElementById('new-profile-btn');
+        window.app.loadProfileBtn = document.getElementById('load-profile-btn');
+        window.app.profileForm = document.getElementById('profile-form');
+        window.app.profileList = document.getElementById('profile-list');
+        
+        // Set up event listeners
+        if (window.app.newProfileBtn) {
+            window.app.newProfileBtn.addEventListener('click', () => {
+                showSection('create-profile');
+            });
+        }
 
-    // Then check for existing profile
-    if (userProgress.getProgress().profile.username) {
-        loadExistingProfile();
+        if (window.app.loadProfileBtn) {
+            window.app.loadProfileBtn.addEventListener('click', () => {
+                showSection('load-profile');
+            });
+        }
+
+        // Then check for existing profile
+        if (userProgress.getProgress().profile.username) {
+            loadExistingProfile();
+        }
+    } catch (error) {
+        console.error('Error initializing welcome screen:', error);
     }
 });
