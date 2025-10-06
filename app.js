@@ -3,6 +3,69 @@ let dom = {};
 let selectedSection = 'verbs';
 let conjugationFormsList;
 let menuItems;
+let state = {
+    learningQueue: [],
+    currentCard: null,
+    correctCount: 0,
+    incorrectCount: 0,
+    currentTopic: "masu",
+    currentMode: "introduction",
+    currentIntroSlideIndex: 0
+};
+
+// Initialize main app
+const initializeApp = () => {
+    console.log('Initializing app...');
+    
+    // Initialize main app elements
+    menuItems = document.querySelectorAll('.menu-item');
+    conjugationFormsList = document.querySelector('.conjugation-forms');
+    selectedSection = 'verbs'; // Default section
+    
+    // Initialize DOM elements
+    dom = {
+        kanaDisplay: document.getElementById('kana-display'),
+        kanjiDisplay: document.getElementById('kanji-display'),
+        formDisplay: document.getElementById('form-display'),
+        verbTypeDisplay: document.getElementById('verb-type-display'),
+        answerInput: document.getElementById('answer-input'),
+        checkButton: document.getElementById('check-button'),
+        nextButton: document.getElementById('next-button'),
+        feedbackMessage: document.getElementById('feedback-message'),
+        correctAnswerDisplay: document.getElementById('correct-answer-display'),
+        correctCount: document.getElementById('correct-count'),
+        incorrectCount: document.getElementById('incorrect-count'),
+        resetButton: document.getElementById('reset-button'),
+        topicSelect: document.getElementById('topic-select'),
+        introPanel: document.getElementById('introduction-panel'),
+        introTitle: document.getElementById('intro-title'),
+        introSectionsContainer: document.getElementById('intro-sections-container'),
+        startPracticeButton: document.getElementById('start-practice-button'),
+        prevIntroSlideButton: document.getElementById('prev-intro-slide-button'),
+        nextIntroSlideButton: document.getElementById('next-intro-slide-button'),
+        cardPanel: document.querySelector('.card-panel'),
+        feedbackArea: document.querySelector('.feedback-area'),
+        progressArea: document.querySelector('.progress-area')
+    };
+
+    // Set up sidebar
+    setupSidebar();
+    // Load saved state
+    loadState();
+    // Populate topic select
+    populateTopicSelect();
+    
+    // Update conjugation forms for initial section
+    updateConjugationForms(selectedSection);
+    
+    // Check if we should show practice or introduction
+    if (state.currentMode === 'practice' && state.learningQueue.length > 0) {
+        displayNextCard();
+    } else {
+        state.currentMode = 'introduction';
+        displayIntroductionUI();
+    }
+};
 
 document.addEventListener('DOMContentLoaded', () => {
     console.log('App initializing...');
@@ -97,7 +160,15 @@ document.addEventListener('DOMContentLoaded', () => {
         if (profile && profile.username) {
             welcomeScreen.classList.add('hidden');
             mainApp.classList.remove('hidden');
-            initializeApp();
+            // Defer initialization to next tick to ensure all declarations are processed
+            setTimeout(() => {
+                try {
+                    initializeApp();
+                } catch (error) {
+                    console.error('Error initializing app:', error);
+                    showSection('profile-selection');
+                }
+            }, 0);
         } else {
             showSection('profile-selection');
         }
@@ -182,10 +253,12 @@ document.addEventListener('DOMContentLoaded', () => {
         console.error('Profile form not found');
     }
 
-    // Check for existing profile
-    if (userProgress.getProgress().profile.username) {
-        loadExistingProfile();
-    }
+    // Check for existing profile after DOM is fully loaded
+    setTimeout(() => {
+        if (userProgress.getProgress().profile.username) {
+            loadExistingProfile();
+        }
+    }, 0);
 
     // Initialize main app
     const initializeApp = () => {
@@ -305,15 +378,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // DOM elements are now initialized in initializeApp()
 
-    let state = {
-        learningQueue: [],
-        currentCard: null,
-        correctCount: 0,
-        incorrectCount: 0,
-        currentTopic: "masu",
-        currentMode: "introduction",
-        currentIntroSlideIndex: 0
-    };
+    // State is now declared globally
 
     const saveState = () => {
         const stateToSave = { ...state };
