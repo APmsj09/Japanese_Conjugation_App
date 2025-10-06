@@ -90,7 +90,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const initializeApp = () => {
         // Initialize sidebar elements
         const menuItems = document.querySelectorAll('.menu-item');
-        const conjugationFormsList = document.querySelector('.conjugation-forms');
+        // Use the outer conjugationFormsList variable instead of redeclaring it
         let selectedSection = 'verbs'; // Default section
 
     // Data loading check with detailed error reporting
