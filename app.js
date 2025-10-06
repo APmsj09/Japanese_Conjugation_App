@@ -1,8 +1,97 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // Initialize sidebar elements
+    // Initialize welcome screen elements
+    const welcomeScreen = document.getElementById('welcome-screen');
+    const mainApp = document.getElementById('main-app');
+    const newProfileBtn = document.getElementById('new-profile-btn');
+    const loadProfileBtn = document.getElementById('load-profile-btn');
+    const profileForm = document.getElementById('profile-form');
+    const profileList = document.getElementById('profile-list');
+    
+    // Initialize main app elements
     const menuItems = document.querySelectorAll('.menu-item');
     const conjugationFormsList = document.querySelector('.conjugation-forms');
     let selectedSection = 'verbs'; // Default section
+    
+    // Profile management functions
+    const showSection = (sectionId) => {
+        document.querySelectorAll('.welcome-section').forEach(section => {
+            section.classList.remove('active');
+        });
+        document.getElementById(sectionId).classList.add('active');
+    };
+
+    const createNewProfile = (profileData) => {
+        // Initialize a new profile
+        userProgress.updateProfile({
+            username: profileData.username,
+            level: 1,
+            totalExp: 0,
+            joinDate: new Date().toISOString(),
+            settings: {
+                dailyGoal: parseInt(profileData.dailyGoal),
+                studyLevel: profileData.level
+            }
+        });
+        
+        // Hide welcome screen and show main app
+        welcomeScreen.classList.add('hidden');
+        mainApp.classList.remove('hidden');
+        
+        // Initialize the app
+        initializeApp();
+    };
+
+    const loadExistingProfile = () => {
+        const profile = userProgress.getProgress().profile;
+        if (profile && profile.username) {
+            welcomeScreen.classList.add('hidden');
+            mainApp.classList.remove('hidden');
+            initializeApp();
+        } else {
+            showSection('profile-selection');
+        }
+    };
+
+    // Event Listeners for Welcome Screen
+    newProfileBtn.addEventListener('click', () => showSection('create-profile'));
+    loadProfileBtn.addEventListener('click', () => showSection('load-profile'));
+
+    // Handle level and goal button selections
+    document.querySelectorAll('.level-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.querySelectorAll('.level-btn').forEach(b => b.classList.remove('selected'));
+            btn.classList.add('selected');
+        });
+    });
+
+    document.querySelectorAll('.goal-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.querySelectorAll('.goal-btn').forEach(b => b.classList.remove('selected'));
+            btn.classList.add('selected');
+        });
+    });
+
+    // Handle profile form submission
+    profileForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const username = document.getElementById('username').value;
+        const level = document.querySelector('.level-btn.selected')?.dataset.level || 'beginner';
+        const dailyGoal = document.querySelector('.goal-btn.selected')?.dataset.goal || '20';
+        
+        createNewProfile({ username, level, dailyGoal });
+    });
+
+    // Check for existing profile
+    if (userProgress.getProgress().profile.username) {
+        loadExistingProfile();
+    }
+
+    // Initialize main app
+    const initializeApp = () => {
+        // Initialize sidebar elements
+        const menuItems = document.querySelectorAll('.menu-item');
+        const conjugationFormsList = document.querySelector('.conjugation-forms');
+        let selectedSection = 'verbs'; // Default section
 
     // Data loading check with detailed error reporting
     console.log('Debug: Loading data structures...');
@@ -415,7 +504,61 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     // Update conjugation forms in sidebar based on selected section
-    const updateConjugationForms = (section) => {
+        const updateConjugationForms = (section) => {
+        const conjugationFormsList = document.querySelector('.conjugation-forms');
+        if (!conjugationFormsList) return;
+
+        conjugationFormsList.innerHTML = '';
+
+        // Get the appropriate forms for the section
+        let forms = [];
+        switch(section) {
+            case 'verbs':
+                forms = conjugationForms.filter(form => 
+                    ['masu', 'masuNegative', 'te', 'ta', 'nai', 'potential', 'passive', 'causative'].includes(form.key)
+                );
+                break;
+            case 'adjectives':
+                forms = conjugationForms.filter(form => 
+                    ['iAdjectiveNegative', 'iAdjectivePast', 'iAdjectivePastNegative'].includes(form.key)
+                );
+                break;
+            case 'particles':
+                forms = conjugationForms.filter(form => form.key === 'meaning');
+                break;
+            default:
+                forms = [];
+        }
+
+        // Create and append form items
+        forms.forEach(form => {
+            const item = document.createElement('div');
+            item.classList.add('menu-item');
+            item.dataset.form = form.key;
+            item.textContent = form.display;
+            
+            // Highlight if this is the current topic
+            if (form.key === state.currentTopic) {
+                item.classList.add('active');
+            }
+
+            // Add click handler
+            item.addEventListener('click', () => {
+                // Update active state
+                conjugationFormsList.querySelectorAll('.menu-item').forEach(mi => 
+                    mi.classList.remove('active')
+                );
+                item.classList.add('active');
+
+                // Update topic and regenerate practice session
+                state.currentTopic = form.key;
+                dom.topicSelect.value = form.key;
+                generateNewPracticeSession();
+            });
+
+            conjugationFormsList.appendChild(item);
+        });
+    };
         const conjugationFormsList = document.querySelector('.conjugation-forms');
         conjugationFormsList.innerHTML = '';  // Clear existing forms
         
@@ -526,10 +669,72 @@ document.addEventListener('DOMContentLoaded', () => {
         updateConjugationForms(selectedSection);
     });
 
+    // Handle section changes
+    const handleSectionChange = (section) => {
+        selectedSection = section;
+        
+        // Update UI to reflect selected section
+        const menuItems = document.querySelectorAll('.menu-item');
+        menuItems.forEach(item => {
+            if (item.dataset.section === section) {
+                item.classList.add('active');
+            } else {
+                item.classList.remove('active');
+            }
+        });
+
+        // Clear and repopulate topic select based on new section
+        const select = dom.topicSelect;
+        select.innerHTML = '';
+        
+        // Get topics for the selected section
+        let topics = [];
+        switch(section) {
+            case 'verbs':
+                topics = conjugationForms.filter(form => 
+                    ['masu', 'masuNegative', 'te', 'ta', 'nai', 'potential', 'passive', 'causative'].includes(form.key)
+                );
+                break;
+            case 'adjectives':
+                topics = conjugationForms.filter(form => 
+                    ['iAdjectiveNegative', 'iAdjectivePast', 'iAdjectivePastNegative'].includes(form.key)
+                );
+                break;
+            case 'particles':
+                topics = conjugationForms.filter(form => form.key === 'meaning');
+                break;
+        }
+        
+        // Populate select with new options
+        topics.forEach(topic => {
+            const option = document.createElement('option');
+            option.value = topic.key;
+            option.textContent = topic.display;
+            select.appendChild(option);
+        });
+
+        // Set default selection
+        if (topics.length > 0) {
+            select.value = topics[0].key;
+            state.currentTopic = topics[0].key;
+            generateNewPracticeSession();
+        }
+
+        // Update conjugation forms display
+        updateConjugationForms(section);
+    };
+
     // Initial Load
     populateTopicSelect();
     loadState();
     setupSidebar();
+    
+    // Set up section change handlers
+    document.querySelectorAll('.menu-item[data-section]').forEach(item => {
+        item.addEventListener('click', (e) => {
+            handleSectionChange(e.target.dataset.section);
+        });
+    });
     
     if (state.currentMode === 'practice' && state.learningQueue.length > 0) {
         displayNextCard();
