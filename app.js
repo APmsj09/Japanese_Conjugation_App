@@ -1,7 +1,8 @@
-// Global variables
-let conjugationFormsList;
-let menuItems;
-// State is now managed in window.appState.state// Initialize main app
+// Global variables and state
+const conjugationFormsList;
+const menuItems;
+
+// Initialize main app
 const initializeApp = () => {
     console.log('Initializing app...');
     
@@ -11,7 +12,7 @@ const initializeApp = () => {
     selectedSection = 'verbs'; // Default section
     
     // Initialize DOM elements
-    dom = {
+    Object.assign(dom, {
         kanaDisplay: document.getElementById('kana-display'),
         kanjiDisplay: document.getElementById('kanji-display'),
         formDisplay: document.getElementById('form-display'),
@@ -184,6 +185,25 @@ const app = {
 // Make app state globally available
 window.app = app;
 
+// Initialize global app state
+window.app = {
+    dom: {},
+    conjugationFormsList: null,
+    menuItems: null,
+    selectedSection: 'verbs',
+    welcomeScreen: null,
+    mainApp: null,
+    state: {
+        learningQueue: [],
+        currentCard: null,
+        correctCount: 0,
+        incorrectCount: 0,
+        currentTopic: "masu",
+        currentMode: "introduction",
+        currentIntroSlideIndex: 0
+    }
+};
+
 document.addEventListener('DOMContentLoaded', () => {
     console.log('App initializing...');
     
@@ -209,8 +229,6 @@ document.addEventListener('DOMContentLoaded', () => {
     let selectedSection = 'verbs'; // Default section
     let conjugationFormsList;
     let menuItems;
-    let dom = {}; // Initialize dom object
-    
     // Profile management functions
     const showSection = (sectionId) => {
         console.log('Showing section:', sectionId);
