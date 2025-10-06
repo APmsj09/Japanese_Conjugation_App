@@ -48,32 +48,33 @@ document.addEventListener('DOMContentLoaded', () => {
             if (i + 1 < romaji.length && romaji[i] !== 'n' && romaji[i] === romaji[i+1]) {
                 hiragana += 'っ';
                 i++;
-                continue;
             }
             let found = false;
             // Check for 3-character kana
             if (i + 2 < romaji.length) {
-                const threeChar = romaji.substring(i, i + 3);
-                if (wanakana[threeChar]) {
-                    hiragana += wanakana[threeChar];
+                const tryKana = romaji.slice(i, i + 3);
+                if (wanakana[tryKana]) {
+                    hiragana += wanakana[tryKana];
                     i += 3;
                     found = true;
                 }
             }
             // Check for 2-character kana
             if (!found && i + 1 < romaji.length) {
-                const twoChar = romaji.substring(i, i + 2);
-                if (wanakana[twoChar]) {
-                    hiragana += wanakana[twoChar];
+                const tryKana = romaji.slice(i, i + 2);
+                if (wanakana[tryKana]) {
+                    hiragana += wanakana[tryKana];
                     i += 2;
                     found = true;
                 }
             }
             // Handle 1-character kana
             if (!found) {
-                const oneChar = romaji[i];
-                hiragana += wanakana[oneChar] || oneChar;
-                i += 1;
+                const tryKana = romaji[i];
+                if (wanakana[tryKana]) {
+                    hiragana += wanakana[tryKana];
+                }
+                i++;
             }
         }
         return hiragana;
@@ -335,6 +336,15 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     // Event Listeners
+    // Add real-time romaji to hiragana conversion
+    dom.answerInput.addEventListener('input', (e) => {
+        const romaji = e.target.value;
+        const hiragana = toHiragana(romaji);
+        if (state.currentCard && state.currentCard.conjugations) {
+            dom.kanaDisplay.textContent = hiragana || state.currentCard.kana;
+        }
+    });
+
     dom.answerInput.addEventListener('keydown', (e) => {
         if (e.key === 'Enter') {
             if (!dom.checkButton.classList.contains('hidden')) {
