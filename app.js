@@ -1,4 +1,9 @@
 document.addEventListener('DOMContentLoaded', () => {
+    // Initialize sidebar elements
+    const menuItems = document.querySelectorAll('.menu-item');
+    const conjugationFormsList = document.querySelector('.conjugation-forms');
+    let selectedSection = 'verbs'; // Default section
+
     // Data loading check with detailed error reporting
     console.log('Debug: Loading data structures...');
     const requiredData = {
@@ -391,9 +396,157 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    // Sidebar functionality
+    const setupSidebar = () => {
+        // Initially populate conjugation forms based on verbs (default section)
+        updateConjugationForms('verbs');
+
+        // Setup menu item click handlers
+        menuItems.forEach(item => {
+            item.addEventListener('click', () => {
+                menuItems.forEach(mi => mi.classList.remove('active'));
+                item.classList.add('active');
+                selectedSection = item.dataset.section;
+                updateTopicSelectForSection(selectedSection);
+                displayIntroductionUI();
+            });
+        });
+    };
+
+    // Update conjugation forms in sidebar based on selected section
+    const updateConjugationForms = (section) => {
+        if (!conjugationFormsList) return;
+        
+        conjugationFormsList.innerHTML = '';
+        let forms = [];
+
+        switch(section) {
+            case 'verbs':
+                forms = conjugationForms
+                    .filter(form => form.category === 'Verbs')
+                    .map(form => ({
+                        label: form.display,
+                        key: form.key,
+                        isActive: state.currentTopic === form.key
+                    }));
+                break;
+            case 'adjectives':
+                forms = conjugationForms
+                    .filter(form => form.category === 'Adjectives')
+                    .map(form => ({
+                        label: form.display,
+                        key: form.key,
+                        isActive: state.currentTopic === form.key
+                    }));
+                break;
+            case 'particles':
+                forms = conjugationForms
+                    .filter(form => form.category === 'Particles')
+                    .map(form => ({
+                        label: form.display,
+                        key: form.key,
+                        isActive: state.currentTopic === form.key
+                    }));
+                break;
+            case 'grammar':
+                forms = ['N5', 'N4'].map(level => ({
+                    label: `JLPT ${level}`,
+                    key: `grammar_${level.toLowerCase()}`,
+                    isActive: state.currentTopic.startsWith(`grammar_${level.toLowerCase()}`)
+                }));
+                break;
+        }
+
+        forms.forEach(form => {
+            const li = document.createElement('li');
+            li.className = `menu-item${form.isActive ? ' active' : ''}`;
+            li.textContent = form.label;
+            li.addEventListener('click', () => {
+                document.querySelectorAll('.conjugation-forms .menu-item')
+                    .forEach(item => item.classList.remove('active'));
+                li.classList.add('active');
+                dom.topicSelect.value = form.key;
+                state.currentTopic = form.key;
+                displayIntroductionUI();
+            });
+            conjugationFormsList.appendChild(li);
+        });
+    };
+
+    // Update topic select based on selected section
+    const updateTopicSelectForSection = (section) => {
+        dom.topicSelect.innerHTML = ''; // Clear existing options
+        switch(section) {
+            case 'verbs':
+                const verbForms = conjugationForms.filter(form => form.category === 'Verbs');
+                verbForms.forEach(form => {
+                    const option = document.createElement('option');
+                    option.value = form.key;
+                    option.textContent = form.display;
+                    dom.topicSelect.appendChild(option);
+                });
+                break;
+            case 'adjectives':
+                const adjForms = conjugationForms.filter(form => form.category === 'Adjectives');
+                adjForms.forEach(form => {
+                    const option = document.createElement('option');
+                    option.value = form.key;
+                    option.textContent = form.display;
+                    dom.topicSelect.appendChild(option);
+                });
+                break;
+            case 'particles':
+                const particleForms = conjugationForms.filter(form => form.category === 'Particles');
+                particleForms.forEach(form => {
+                    const option = document.createElement('option');
+                    option.value = form.key;
+                    option.textContent = form.display;
+                    dom.topicSelect.appendChild(option);
+                });
+                break;
+            case 'grammar':
+                const grammarN5 = japaneseGrammar.filter(point => point.level === 'N5');
+                const grammarN4 = japaneseGrammar.filter(point => point.level === 'N4');
+                
+                const n5Group = document.createElement('optgroup');
+                n5Group.label = 'JLPT N5';
+                grammarN5.forEach((point, index) => {
+                    const option = document.createElement('option');
+                    option.value = `grammar_${index}`;
+                    option.textContent = point.grammar;
+                    n5Group.appendChild(option);
+                });
+                
+                const n4Group = document.createElement('optgroup');
+                n4Group.label = 'JLPT N4';
+                grammarN4.forEach((point, index) => {
+                    const option = document.createElement('option');
+                    option.value = `grammar_${index + grammarN5.length}`;
+                    option.textContent = point.grammar;
+                    n4Group.appendChild(option);
+                });
+                
+                dom.topicSelect.appendChild(n5Group);
+                dom.topicSelect.appendChild(n4Group);
+                break;
+        }
+        
+        // Update state
+        state.currentTopic = dom.topicSelect.value;
+        saveState();
+    };
+
+    // Update sidebar when topic changes
+    const oldTopicChangeHandler = dom.topicSelect.onchange;
+    dom.topicSelect.addEventListener('change', (e) => {
+        if (oldTopicChangeHandler) oldTopicChangeHandler(e);
+        updateConjugationForms(selectedSection);
+    });
+
     // Initial Load
     populateTopicSelect();
     loadState();
+    setupSidebar();
     
     if (state.currentMode === 'practice' && state.learningQueue.length > 0) {
         displayNextCard();
