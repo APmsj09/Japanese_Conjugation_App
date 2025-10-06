@@ -1,19 +1,7 @@
 // Global variables
-let dom = {};
-let selectedSection = 'verbs';
 let conjugationFormsList;
 let menuItems;
-let state = {
-    learningQueue: [],
-    currentCard: null,
-    correctCount: 0,
-    incorrectCount: 0,
-    currentTopic: "masu",
-    currentMode: "introduction",
-    currentIntroSlideIndex: 0
-};
-
-// Initialize main app
+// State is now managed in window.appState.state// Initialize main app
 const initializeApp = () => {
     console.log('Initializing app...');
     
@@ -70,8 +58,6 @@ const initializeApp = () => {
 // Global variables and state
 let dom = {};
 let selectedSection = 'verbs';
-let conjugationFormsList;
-let menuItems;
 let welcomeScreen, mainApp, newProfileBtn, loadProfileBtn, profileForm, profileList;
 
 const state = {
@@ -171,6 +157,32 @@ window.appState = {
         currentIntroSlideIndex: 0
     }
 };
+
+// Initialize global app state
+const app = {
+    dom: {},
+    selectedSection: 'verbs',
+    conjugationFormsList: null,
+    menuItems: null,
+    welcomeScreen: null,
+    mainApp: null,
+    newProfileBtn: null,
+    loadProfileBtn: null,
+    profileForm: null,
+    profileList: null,
+    state: {
+        learningQueue: [],
+        currentCard: null,
+        correctCount: 0,
+        incorrectCount: 0,
+        currentTopic: "masu",
+        currentMode: "introduction",
+        currentIntroSlideIndex: 0
+    }
+};
+
+// Make app state globally available
+window.app = app;
 
 document.addEventListener('DOMContentLoaded', () => {
     console.log('App initializing...');
