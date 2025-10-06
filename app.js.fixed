@@ -157,6 +157,8 @@ function showSection(sectionId) {
     });
 }
 
+[Rest of the original app.js file...]
+
 // Check for existing profile and initialize app
 document.addEventListener('DOMContentLoaded', () => {
     // Initialize base app state
