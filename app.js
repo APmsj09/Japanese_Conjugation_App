@@ -570,9 +570,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Update conjugation forms in sidebar based on selected section
         const updateConjugationForms = (section) => {
-        const conjugationFormsList = document.querySelector('.conjugation-forms');
-        if (!conjugationFormsList) return;
+        if (!conjugationFormsList) {
+            console.error('Conjugation forms list element not found');
+            return;
+        }
 
+        console.log('Updating conjugation forms for section:', section);
         conjugationFormsList.innerHTML = '';
 
         // Get the appropriate forms for the section
@@ -594,6 +597,8 @@ document.addEventListener('DOMContentLoaded', () => {
             default:
                 forms = [];
         }
+
+        console.log('Filtered forms for section:', forms);
 
         // Create and append form items
         forms.forEach(form => {
@@ -624,9 +629,6 @@ document.addEventListener('DOMContentLoaded', () => {
             conjugationFormsList.appendChild(item);
         });
     };
-        const conjugationFormsList = document.querySelector('.conjugation-forms');
-        conjugationFormsList.innerHTML = '';  // Clear existing forms
-        
         // Get forms based on section
         let forms = [];
         switch(section) {
@@ -646,6 +648,13 @@ document.addEventListener('DOMContentLoaded', () => {
             default:
                 forms = conjugationForms;
         }
+        
+        if (!conjugationFormsList) {
+            console.error('Conjugation forms list element not found');
+            return;
+        }
+
+        conjugationFormsList.innerHTML = '';  // Clear existing forms
         
         // Create and append form items
         forms.forEach(form => {
