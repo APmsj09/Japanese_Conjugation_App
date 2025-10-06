@@ -153,7 +153,58 @@ const japaneseAdjectives = [
     { word: "暗い", kana: "くらい", type: "i-adjective", meaning: "dark", conjugations: { iAdjectiveNegative: "くらくない", iAdjectivePast: "くらかった", iAdjectivePastNegative: "くらくなかった" }}
 ];
 
-/* Duplicate declaration of japaneseParticles removed to avoid redeclaration error. */
+const japaneseParticles = [
+    { word: "は", kana: "は", meaning: "Topic Marker", type: "particle", conjugations: { meaning: "topic marker" },
+        fillInBlankExamples: [
+        { sentence: "わたし＿がくせい です。", correctAnswer: "は", translation: "I am a student." },
+        { sentence: "ねこ＿かわいい です。", correctAnswer: "は", translation: "The cat is cute." }
+        ]},
+    { word: "が", kana: "が", meaning: "Subject Marker", type: "particle", conjugations: { meaning: "subject marker" },
+        fillInBlankExamples: [
+        { sentence: "だれ＿きましたか。", correctAnswer: "が", translation: "Who came?" },
+        { sentence: "いぬ＿います。", correctAnswer: "が", translation: "There is a dog." }
+        ]},
+    { word: "を", kana: "を", meaning: "Direct Object Marker", type: "particle", conjugations: { meaning: "direct object marker" },
+        fillInBlankExamples: [
+        { sentence: "パン＿たべます。", correctAnswer: "を", translation: "I eat bread." },
+        { sentence: "えいが＿みます。", correctAnswer: "を", translation: "I watch a movie." }
+        ]},
+    { word: "に", kana: "に", meaning: "Location/Direction/Time Marker", type: "particle", conjugations: { meaning: "location direction time marker" },
+        fillInBlankExamples: [
+        { sentence: "とうきょう＿いきます。", correctAnswer: "に", translation: "I go to Tokyo." },
+        { sentence: "７時＿おきます。", correctAnswer: "に", translation: "I wake up at 7 o'clock." }
+        ]},
+    { word: "で", kana: "で", meaning: "Location of action/Means/Method", type: "particle", conjugations: { meaning: "location of action means method" },
+        fillInBlankExamples: [
+        { sentence: "レストラン＿たべます。", correctAnswer: "で", translation: "I eat at the restaurant." },
+        { sentence: "バス＿いきます。", correctAnswer: "で", translation: "I go by bus." }
+        ]},
+    { word: "と", kana: "と", meaning: "And/With", type: "particle", conjugations: { meaning: "and with" },
+        fillInBlankExamples: [
+        { sentence: "わたし＿ともだち。", correctAnswer: "と", translation: "I and my friend." },
+        { sentence: "コーヒー＿パン。", correctAnswer: "と", translation: "Coffee and bread." }
+        ]},
+    { word: "の", kana: "の", meaning: "Possessive/Noun modifier", type: "particle", conjugations: { meaning: "possessive noun modifier" },
+        fillInBlankExamples: [
+        { sentence: "わたし＿ほん。", correctAnswer: "の", translation: "My book." },
+        { sentence: "がっこう＿せんせい。", correctAnswer: "の", translation: "School's teacher (teacher of the school)." }
+        ]},
+    { word: "へ", kana: "へ", meaning: "Directional (e)", type: "particle", conjugations: { meaning: "directional e" },
+        fillInBlankExamples: [
+        { sentence: "がっこう＿いきます。", correctAnswer: "へ", translation: "I go towards school." },
+        { sentence: "うち＿かえります。", correctAnswer: "へ", translation: "I return home." }
+        ]},
+    { word: "も", kana: "も", meaning: "Also/Too", type: "particle", conjugations: { meaning: "also too" },
+        fillInBlankExamples: [
+        { sentence: "わたし＿がくせいです。", correctAnswer: "も", translation: "I am also a student." },
+        { sentence: "これ＿たべません。", correctAnswer: "も", translation: "I won't eat this either." }
+        ]},
+    { word: "か", kana: "か", meaning: "Question Marker", type: "particle", conjugations: { meaning: "question marker" },
+        fillInBlankExamples: [
+        { sentence: "これはペンです＿。", correctAnswer: "か", translation: "Is this a pen?" },
+        { sentence: "ひらがなをわかります＿。", correctAnswer: "か", translation: "Do you understand Hiragana?" }
+        ]}
+];
 
 const conjugationForms = [
     { key: "masu", display: "Masu Form (ます)" },
@@ -519,7 +570,7 @@ const japaneseGrammar = [
             { jp: "今日は日曜日なので、銀行は休みです。", kana: "きょうはにちようなので、ぎんこうはやすみです。", en: "Because today is Sunday, the bank is closed." },
             { jp: "電車が遅れたので、会議に遅刻しました。", kana: "でんしゃがおくれたので、かいぎにちこくしました。", en: "I was late for the meeting because the train was delayed." }
         ]
-    },
+    }
     {
         grammar: "AはBです",
         meaning: "A is B.",
@@ -811,7 +862,7 @@ const japaneseGrammar = [
             { jp: "薬を飲んだのに、まだ頭が痛いです。", kana: "くすりをのんだのに、まだあたまがいたいです。", en: "Even though I took the medicine, my head still hurts." },
             { jp: "今日は日曜日なのに、仕事をしなければなりません。", kana: "きょうはにちようなのに、しごとをしなければなりません。", en: "Even though it's Sunday, I have to work." }
         ]
-    },
+    }
     {
         grammar: "AはBです",
         meaning: "A is B.",

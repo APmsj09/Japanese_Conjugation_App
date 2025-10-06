@@ -262,15 +262,18 @@
         </div>
     </main>
 
-    <script type="text/javascript">
+        <script type="text/javascript">
         window.onerror = function(msg, url, lineNo, columnNo, error) {
             console.error('Error: ' + msg + '\nURL: ' + url + '\nLine: ' + lineNo + '\nColumn: ' + columnNo + '\nError object: ' + JSON.stringify(error));
             return false;
         };
     </script>
+    <!-- Load data structures first -->
     <script src="data.js"></script>
+    <!-- Then load supporting modules -->
     <script src="userProgress.js"></script>
     <script src="introContent.js"></script>
+    <!-- Finally load the main application -->
     <script src="app.js"></script>
 </body>
 </html>
