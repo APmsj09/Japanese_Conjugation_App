@@ -262,6 +262,12 @@
         </div>
     </main>
 
+    <script type="text/javascript">
+        window.onerror = function(msg, url, lineNo, columnNo, error) {
+            console.error('Error: ' + msg + '\nURL: ' + url + '\nLine: ' + lineNo + '\nColumn: ' + columnNo + '\nError object: ' + JSON.stringify(error));
+            return false;
+        };
+    </script>
     <script src="data.js"></script>
     <script src="userProgress.js"></script>
     <script src="introContent.js"></script>

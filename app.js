@@ -1,7 +1,27 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // Data loading check
-    if (typeof japaneseVerbs === 'undefined' || typeof conjugationForms === 'undefined' || typeof japaneseGrammar === 'undefined') {
-        document.getElementById('app-container').innerHTML = '<h1>Error</h1><p>Could not load necessary data. Please check your internet connection and refresh the page.</p>';
+    // Data loading check with detailed error reporting
+    const requiredData = {
+        japaneseVerbs,
+        japaneseAdjectives,
+        conjugationForms,
+        japaneseGrammar,
+        japaneseParticles,
+        formIntroContent
+    };
+
+    const missingData = Object.entries(requiredData)
+        .filter(([key, value]) => typeof value === 'undefined')
+        .map(([key]) => key);
+
+    if (missingData.length > 0) {
+        document.getElementById('app-container').innerHTML = `
+            <h1>Error</h1>
+            <p>Could not load the following data:</p>
+            <ul>
+                ${missingData.map(item => `<li>${item}</li>`).join('')}
+            </ul>
+            <p>Please check the browser console for detailed error messages and refresh the page.</p>`;
+        console.error('Missing data objects:', missingData);
         return; // Stop the script from running further
     }
 
