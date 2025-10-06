@@ -683,6 +683,11 @@ function toHiragana(romaji) {
 
 // Check for existing profile and initialize app
 document.addEventListener('DOMContentLoaded', () => {
+    // Initialize app elements first
+    window.app.welcomeScreen = document.getElementById('welcome-screen');
+    window.app.mainApp = document.getElementById('main-app');
+
+    // Then check for existing profile
     if (userProgress.getProgress().profile.username) {
         loadExistingProfile();
     }
