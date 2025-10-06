@@ -398,82 +398,65 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Sidebar functionality
     const setupSidebar = () => {
-        // Initially populate conjugation forms based on verbs (default section)
-        updateConjugationForms('verbs');
-
-        // Setup menu item click handlers
+        const menuItems = document.querySelectorAll('.menu-item');
         menuItems.forEach(item => {
-            item.addEventListener('click', () => {
+            item.addEventListener('click', (e) => {
+                // Remove active class from all items
                 menuItems.forEach(mi => mi.classList.remove('active'));
-                item.classList.add('active');
-                selectedSection = item.dataset.section;
+                // Add active class to clicked item
+                e.currentTarget.classList.add('active');
+                
+                // Update the selected section and refresh UI
+                selectedSection = e.currentTarget.dataset.section;
+                updateConjugationForms(selectedSection);
                 updateTopicSelectForSection(selectedSection);
-                displayIntroductionUI();
             });
         });
     };
 
     // Update conjugation forms in sidebar based on selected section
     const updateConjugationForms = (section) => {
-        if (!conjugationFormsList) return;
+        const conjugationFormsList = document.querySelector('.conjugation-forms');
+        conjugationFormsList.innerHTML = '';  // Clear existing forms
         
-        conjugationFormsList.innerHTML = '';
+        // Get forms based on section
         let forms = [];
-
         switch(section) {
             case 'verbs':
-                forms = conjugationForms
-                    .filter(form => form.category === 'Verbs')
-                    .map(form => ({
-                        label: form.display,
-                        key: form.key,
-                        isActive: state.currentTopic === form.key
-                    }));
+                forms = conjugationForms.filter(form => 
+                    ['masu', 'masuNegative', 'te', 'ta', 'nai', 'potential', 'passive', 'causative'].includes(form.key)
+                );
                 break;
             case 'adjectives':
-                forms = conjugationForms
-                    .filter(form => form.category === 'Adjectives')
-                    .map(form => ({
-                        label: form.display,
-                        key: form.key,
-                        isActive: state.currentTopic === form.key
-                    }));
+                forms = conjugationForms.filter(form => 
+                    ['iAdjectiveNegative', 'iAdjectivePast', 'iAdjectivePastNegative'].includes(form.key)
+                );
                 break;
             case 'particles':
-                forms = conjugationForms
-                    .filter(form => form.category === 'Particles')
-                    .map(form => ({
-                        label: form.display,
-                        key: form.key,
-                        isActive: state.currentTopic === form.key
-                    }));
+                forms = conjugationForms.filter(form => form.key === 'meaning');
                 break;
-            case 'grammar':
-                forms = ['N5', 'N4'].map(level => ({
-                    label: `JLPT ${level}`,
-                    key: `grammar_${level.toLowerCase()}`,
-                    isActive: state.currentTopic.startsWith(`grammar_${level.toLowerCase()}`)
-                }));
-                break;
+            default:
+                forms = conjugationForms;
         }
-
+        
+        // Create and append form items
         forms.forEach(form => {
-            const li = document.createElement('li');
-            li.className = `menu-item${form.isActive ? ' active' : ''}`;
-            li.textContent = form.label;
-            li.addEventListener('click', () => {
-                document.querySelectorAll('.conjugation-forms .menu-item')
-                    .forEach(item => item.classList.remove('active'));
-                li.classList.add('active');
-                dom.topicSelect.value = form.key;
+            const item = document.createElement('div');
+            item.classList.add('menu-item');
+            item.dataset.form = form.key;
+            item.textContent = form.display;
+            item.addEventListener('click', () => {
+                // Handle form selection
+                document.querySelectorAll('.conjugation-forms .menu-item').forEach(mi => 
+                    mi.classList.remove('active')
+                );
+                item.classList.add('active');
                 state.currentTopic = form.key;
-                displayIntroductionUI();
+                generateNewPracticeSession();
             });
-            conjugationFormsList.appendChild(li);
+            conjugationFormsList.appendChild(item);
         });
-    };
-
-    // Update topic select based on selected section
+    };    // Update topic select based on selected section
     const updateTopicSelectForSection = (section) => {
         dom.topicSelect.innerHTML = ''; // Clear existing options
         switch(section) {

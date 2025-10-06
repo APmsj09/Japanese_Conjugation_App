@@ -11,17 +11,32 @@ class UserProgress {
             return JSON.parse(savedData);
         }
         return {
+            profile: {
+                username: '',
+                level: 1,
+                totalExp: 0,
+                joinDate: new Date().toISOString(),
+                avatar: 'default',
+                achievements: [],
+                currentRank: 'Beginner'
+            },
             completedTopics: {},  // {topicKey: {attempts: number, correctCount: number, lastAttempted: date}}
             masteredWords: {},    // {word: {correct: number, incorrect: number, lastPracticed: date}}
             statistics: {
                 totalCorrect: 0,
                 totalIncorrect: 0,
                 streakDays: 0,
-                lastPracticeDate: null
+                lastPracticeDate: null,
+                longestStreak: 0,
+                totalPracticeTime: 0,
+                sessionCount: 0,
+                topicsCompleted: 0
             },
             settings: {
                 dailyGoal: 20,    // Number of exercises per day
-                reviewInterval: 3  // Days before reviewing mastered words
+                reviewInterval: 3,  // Days before reviewing mastered words
+                studyReminders: false,
+                notificationTime: '09:00'
             }
         };
     }
@@ -157,18 +172,141 @@ class UserProgress {
     }
 
     resetAllProgress() {
+        const oldSettings = this.data.settings;
+        const oldProfile = this.data.profile;
         this.data = {
+            profile: oldProfile, // Preserve profile
             completedTopics: {},
             masteredWords: {},
             statistics: {
                 totalCorrect: 0,
                 totalIncorrect: 0,
                 streakDays: 0,
-                lastPracticeDate: null
+                lastPracticeDate: null,
+                longestStreak: this.data.statistics.longestStreak, // Preserve record
+                totalPracticeTime: 0,
+                sessionCount: this.data.statistics.sessionCount,
+                topicsCompleted: 0
             },
-            settings: this.data.settings // Preserve user settings
+            settings: oldSettings // Preserve user settings
         };
         this.saveProgress();
+    }
+
+    // Profile Management
+    updateProfile(profileData) {
+        this.data.profile = { ...this.data.profile, ...profileData };
+        this.saveProgress();
+    }
+
+    calculateLevel() {
+        const exp = this.data.profile.totalExp;
+        // Simple level calculation: every 100 exp = 1 level
+        const newLevel = Math.floor(exp / 100) + 1;
+        if (newLevel !== this.data.profile.level) {
+            this.data.profile.level = newLevel;
+            this.checkAchievements('level');
+            this.saveProgress();
+        }
+        return newLevel;
+    }
+
+    addExperience(amount) {
+        this.data.profile.totalExp += amount;
+        this.calculateLevel();
+        this.saveProgress();
+    }
+
+    // Achievement System
+    checkAchievements(trigger) {
+        const achievements = {
+            'firstCorrect': {
+                id: 'firstCorrect',
+                title: 'First Step',
+                description: 'Get your first answer correct',
+                condition: () => this.data.statistics.totalCorrect > 0
+            },
+            'tenStreak': {
+                id: 'tenStreak',
+                title: 'On Fire!',
+                description: 'Maintain a 10-day study streak',
+                condition: () => this.data.statistics.streakDays >= 10
+            },
+            'level5': {
+                id: 'level5',
+                title: 'Rising Star',
+                description: 'Reach level 5',
+                condition: () => this.data.profile.level >= 5
+            },
+            'hundredCorrect': {
+                id: 'hundredCorrect',
+                title: 'Century',
+                description: 'Get 100 correct answers',
+                condition: () => this.data.statistics.totalCorrect >= 100
+            }
+        };
+
+        Object.values(achievements).forEach(achievement => {
+            if (!this.data.profile.achievements.includes(achievement.id) && achievement.condition()) {
+                this.unlockAchievement(achievement);
+            }
+        });
+    }
+
+    unlockAchievement(achievement) {
+        this.data.profile.achievements.push(achievement.id);
+        this.saveProgress();
+        // Return achievement data for UI notification
+        return achievement;
+    }
+
+    getProgress() {
+        return {
+            profile: this.data.profile,
+            statistics: this.data.statistics,
+            settings: this.data.settings,
+            masteryLevel: this.calculateMasteryLevel()
+        };
+    }
+
+    calculateMasteryLevel() {
+        const stats = this.data.statistics;
+        const accuracy = stats.totalCorrect / (stats.totalCorrect + stats.totalIncorrect) || 0;
+        const ranks = [
+            { name: 'Beginner', threshold: 0 },
+            { name: 'Intermediate', threshold: 0.6 },
+            { name: 'Advanced', threshold: 0.75 },
+            { name: 'Master', threshold: 0.9 }
+        ];
+        
+        let newRank = ranks[0].name;
+        for (const rank of ranks) {
+            if (accuracy >= rank.threshold) {
+                newRank = rank.name;
+            }
+        }
+
+        if (newRank !== this.data.profile.currentRank) {
+            this.data.profile.currentRank = newRank;
+            this.saveProgress();
+        }
+
+        return newRank;
+    }
+
+    startSession() {
+        this.data.statistics.sessionCount++;
+        this.sessionStartTime = Date.now();
+        this.saveProgress();
+    }
+
+    endSession() {
+        if (this.sessionStartTime) {
+            const sessionDuration = (Date.now() - this.sessionStartTime) / 1000; // Convert to seconds
+            this.data.statistics.totalPracticeTime += sessionDuration;
+            this.sessionStartTime = null;
+            this.saveProgress();
+        }
     }
 }
 
