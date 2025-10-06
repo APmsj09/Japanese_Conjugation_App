@@ -42,19 +42,28 @@ document.addEventListener('DOMContentLoaded', () => {
         console.log('Creating new profile with data:', profileData);
         
         try {
-            // Initialize a new profile
-            userProgress.updateProfile({
+            // Initialize a new profile with default settings
+            const newProfile = {
                 username: profileData.username,
                 level: 1,
                 totalExp: 0,
                 joinDate: new Date().toISOString(),
+                avatar: 'default',
+                achievements: [],
+                currentRank: 'Beginner',
                 settings: {
-                    dailyGoal: parseInt(profileData.dailyGoal),
-                    studyLevel: profileData.level
+                    dailyGoal: parseInt(profileData.dailyGoal) || 20,
+                    studyLevel: profileData.level || 'beginner',
+                    reviewInterval: 3,
+                    studyReminders: false,
+                    notificationTime: '09:00'
                 }
-            });
+            };
             
-            console.log('Profile data saved');
+            // Update profile in userProgress
+            userProgress.updateProfile(newProfile);
+            
+            console.log('Profile data saved:', newProfile);
             
             // Hide welcome screen and show main app
             if (welcomeScreen && mainApp) {
@@ -65,11 +74,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 console.error('Could not find welcome screen or main app elements');
             }
             
-            // Initialize the app
+            // Start a new session and initialize the app
+            userProgress.startSession();
             initializeApp();
+            
+            return true;
         } catch (error) {
             console.error('Error in createNewProfile:', error);
-            throw error;
+            return false;
         }
     };
 
@@ -124,22 +136,39 @@ document.addEventListener('DOMContentLoaded', () => {
             e.preventDefault();
             console.log('Profile form submitted');
             
-            const username = document.getElementById('username')?.value;
-            const level = document.querySelector('.level-btn.selected')?.dataset.level || 'beginner';
-            const dailyGoal = document.querySelector('.goal-btn.selected')?.dataset.goal || '20';
+            const username = document.getElementById('username')?.value?.trim();
+            const selectedLevelBtn = document.querySelector('.level-btn.selected');
+            const selectedGoalBtn = document.querySelector('.goal-btn.selected');
+            const level = selectedLevelBtn?.dataset.level || 'beginner';
+            const dailyGoal = selectedGoalBtn?.dataset.goal || '20';
             
             console.log('Profile data:', { username, level, dailyGoal });
 
             if (!username) {
                 console.error('Username is required');
+                alert('Please enter a username');
                 return;
             }
 
-            try {
-                createNewProfile({ username, level, dailyGoal });
+            if (!selectedLevelBtn) {
+                console.error('Level selection is required');
+                alert('Please select your level');
+                return;
+            }
+
+            if (!selectedGoalBtn) {
+                console.error('Daily goal selection is required');
+                alert('Please select your daily goal');
+                return;
+            }
+
+            const success = createNewProfile({ username, level, dailyGoal });
+            
+            if (success) {
                 console.log('Profile created successfully');
-            } catch (error) {
-                console.error('Error creating profile:', error);
+            } else {
+                console.error('Failed to create profile');
+                alert('There was an error creating your profile. Please try again.');
             }
         });
     } else {
