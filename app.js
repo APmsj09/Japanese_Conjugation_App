@@ -27,6 +27,10 @@ function createNewProfile(profileData) {
         if (!profileData || !profileData.username) {
             throw new Error('Invalid profile data');
         }
+        console.log('Creating new profile:', profileData);
+        if (!userProgress) {
+            throw new Error('UserProgress not initialized');
+        }
 
         const profile = {
             username: profileData.username,
@@ -69,6 +73,7 @@ function createNewProfile(profileData) {
 }
 
 function loadExistingProfile() {
+    console.log('Loading existing profile...');
     const profile = userProgress.getProgress().profile;
     if (profile && profile.username) {
         const welcomeScreen = document.getElementById('welcome-screen');
@@ -159,11 +164,26 @@ function showSection(sectionId) {
 
 // Check for existing profile and initialize app
 document.addEventListener('DOMContentLoaded', () => {
+    console.log('DOM loaded, initializing application...');
+    
+    // First ensure we have a UserProgress instance
+    if (!userProgress) {
+        console.error('UserProgress not initialized');
+        return;
+    }
+
     // Initialize base app state
     initializeWelcomeScreen();
 
     // Check for existing profile
-    if (userProgress.getProgress().profile.username) {
+    const profile = userProgress.getProgress().profile;
+    console.log('Current profile:', profile);
+    
+    if (profile && profile.username) {
+        console.log('Found existing profile, loading...');
         loadExistingProfile();
+    } else {
+        console.log('No existing profile found, showing welcome screen...');
+        showSection('profile-selection');
     }
 });
