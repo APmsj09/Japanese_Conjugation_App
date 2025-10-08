@@ -7,37 +7,13 @@ class UserProgress {
 
     loadProgress() {
         const savedData = localStorage.getItem('japaneseConjugationProgress');
-        if (savedData) {
-            return JSON.parse(savedData);
-        }
+        if (savedData) return JSON.parse(savedData);
         return {
-            profile: {
-                username: '',
-                level: 1,
-                totalExp: 0,
-                joinDate: new Date().toISOString(),
-                avatar: 'default',
-                achievements: [],
-                currentRank: 'Beginner'
-            },
-            completedTopics: {},  // {topicKey: {attempts: number, correctCount: number, lastAttempted: date}}
-            masteredWords: {},    // {word: {correct: number, incorrect: number, lastPracticed: date}}
-            statistics: {
-                totalCorrect: 0,
-                totalIncorrect: 0,
-                streakDays: 0,
-                lastPracticeDate: null,
-                longestStreak: 0,
-                totalPracticeTime: 0,
-                sessionCount: 0,
-                topicsCompleted: 0
-            },
-            settings: {
-                dailyGoal: 20,    // Number of exercises per day
-                reviewInterval: 3,  // Days before reviewing mastered words
-                studyReminders: false,
-                notificationTime: '09:00'
-            }
+            profile: { username: '', level: 1, totalExp: 0, joinDate: null, avatar: 'default', achievements: [], currentRank: 'Beginner' },
+            completedTopics: {},
+            masteredWords: {},
+            statistics: { totalCorrect: 0, totalIncorrect: 0, streakDays: 0, lastPracticeDate: null, longestStreak: 0, totalPracticeTime: 0, sessionCount: 0 },
+            settings: { dailyGoal: 20, reviewInterval: 3, studyReminders: false, notificationTime: '09:00' }
         };
     }
 
@@ -45,170 +21,67 @@ class UserProgress {
         localStorage.setItem('japaneseConjugationProgress', JSON.stringify(this.data));
     }
 
-    // Topic Progress Methods
-    updateTopicProgress(topicKey, isCorrect) {
-        if (!this.data.completedTopics[topicKey]) {
-            this.data.completedTopics[topicKey] = {
-                attempts: 0,
-                correctCount: 0,
-                lastAttempted: new Date().toISOString()
-            };
-        }
-
-        const topic = this.data.completedTopics[topicKey];
-        topic.attempts++;
-        if (isCorrect) topic.correctCount++;
-        topic.lastAttempted = new Date().toISOString();
-        
-        this.saveProgress();
-    }
-
-    // Word Progress Methods
-    updateWordProgress(word, isCorrect) {
-        if (!this.data.masteredWords[word]) {
-            this.data.masteredWords[word] = {
-                correct: 0,
-                incorrect: 0,
-                lastPracticed: new Date().toISOString()
-            };
-        }
-
-        const wordStats = this.data.masteredWords[word];
-        if (isCorrect) {
-            wordStats.correct++;
-        } else {
-            wordStats.incorrect++;
-        }
-        wordStats.lastPracticed = new Date().toISOString();
-
-        this.saveProgress();
-    }
-
-    // Statistics Methods
-    updateStatistics(isCorrect) {
-        if (isCorrect) {
-            this.data.statistics.totalCorrect++;
-        } else {
-            this.data.statistics.totalIncorrect++;
-        }
-
-        // Update streak
-        const today = new Date().toDateString();
-        const lastPractice = this.data.statistics.lastPracticeDate;
-        
-        if (!lastPractice) {
-            this.data.statistics.streakDays = 1;
-        } else {
-            const lastDate = new Date(lastPractice).toDateString();
-            const dayDiff = Math.floor((new Date(today) - new Date(lastDate)) / (1000 * 60 * 60 * 24));
-            
-            if (dayDiff === 1) {
-                this.data.statistics.streakDays++;
-            } else if (dayDiff > 1) {
-                this.data.statistics.streakDays = 1;
-            }
-        }
-        
-        this.data.statistics.lastPracticeDate = today;
-        this.saveProgress();
-    }
-
-    // Analytics Methods
-    getTopicMasteryPercentage(topicKey) {
-        const topic = this.data.completedTopics[topicKey];
-        if (!topic || topic.attempts === 0) return 0;
-        return (topic.correctCount / topic.attempts) * 100;
-    }
-
-    getWordMasteryLevel(word) {
-        const wordStats = this.data.masteredWords[word];
-        if (!wordStats) return 0;
-        
-        const total = wordStats.correct + wordStats.incorrect;
-        if (total === 0) return 0;
-        
-        const accuracy = (wordStats.correct / total) * 100;
-        if (accuracy >= 90 && total >= 5) return 3;  // Mastered
-        if (accuracy >= 70 && total >= 3) return 2;  // Learning
-        return 1;  // Needs Practice
-    }
-
-    getDailyProgress() {
-        const today = new Date().toDateString();
-        let todayCorrect = 0;
-        let todayTotal = 0;
-
-        // Count today's attempts
-        Object.values(this.data.completedTopics).forEach(topic => {
-            if (new Date(topic.lastAttempted).toDateString() === today) {
-                todayTotal += topic.attempts;
-                todayCorrect += topic.correctCount;
-            }
-        });
-
-        return {
-            completed: todayTotal,
-            correct: todayCorrect,
-            goal: this.data.settings.dailyGoal,
-            percentage: (todayTotal / this.data.settings.dailyGoal) * 100
-        };
-    }
-
-    // Settings Methods
-    updateSettings(newSettings) {
-        this.data.settings = { ...this.data.settings, ...newSettings };
-        this.saveProgress();
-    }
-
-    // Reset Methods
-    resetDailyProgress() {
-        Object.keys(this.data.completedTopics).forEach(key => {
-            const topic = this.data.completedTopics[key];
-            if (new Date(topic.lastAttempted).toDateString() === new Date().toDateString()) {
-                delete this.data.completedTopics[key];
-            }
-        });
-        this.saveProgress();
-    }
-
-    resetAllProgress() {
-        const oldSettings = this.data.settings;
-        const oldProfile = this.data.profile;
-        this.data = {
-            profile: oldProfile, // Preserve profile
-            completedTopics: {},
-            masteredWords: {},
-            statistics: {
-                totalCorrect: 0,
-                totalIncorrect: 0,
-                streakDays: 0,
-                lastPracticeDate: null,
-                longestStreak: this.data.statistics.longestStreak, // Preserve record
-                totalPracticeTime: 0,
-                sessionCount: this.data.statistics.sessionCount,
-                topicsCompleted: 0
-            },
-            settings: oldSettings // Preserve user settings
-        };
-        this.saveProgress();
-    }
-
-    // Profile Management
     updateProfile(profileData) {
         this.data.profile = { ...this.data.profile, ...profileData };
         this.saveProgress();
     }
-
-    calculateLevel() {
-        const exp = this.data.profile.totalExp;
-        // Simple level calculation: every 100 exp = 1 level
-        const newLevel = Math.floor(exp / 100) + 1;
-        if (newLevel !== this.data.profile.level) {
-            this.data.profile.level = newLevel;
-            this.checkAchievements('level');
-            this.saveProgress();
+    
+    // REVISED function for SRS logic
+    updateWordProgress(word, isCorrect) {
+        if (!this.data.masteredWords[word]) {
+            this.data.masteredWords[word] = {
+                correct: 0, incorrect: 0, level: 0,
+                lastPracticed: null, dueDate: new Date().toISOString()
+            };
         }
-        return newLevel;
+
+        const wordStats = this.data.masteredWords[word];
+        const now = new Date();
+        wordStats.lastPracticed = now.toISOString();
+
+        const intervals = [1, 3, 7, 14, 30, 90];
+
+        if (isCorrect) {
+            wordStats.correct++;
+            if (wordStats.level < intervals.length) wordStats.level++;
+        } else {
+            wordStats.incorrect++;
+            wordStats.level = Math.max(1, wordStats.level - 1);
+        }
+
+        const daysToAdd = intervals[wordStats.level - 1] || 0;
+        const dueDate = new Date();
+        dueDate.setDate(now.getDate() + daysToAdd);
+        wordStats.dueDate = dueDate.toISOString();
+        this.saveProgress();
+    }
+
+    updateStatistics(isCorrect) {
+        if (isCorrect) {
+            this.data.statistics.totalCorrect++;
+            this.addExperience(10);
+        } else {
+            this.data.statistics.totalIncorrect++;
+        }
+        
+        const today = new Date();
+        const lastPracticeDate = this.data.statistics.lastPracticeDate ? new Date(this.data.statistics.lastPracticeDate) : null;
+
+        if (!lastPracticeDate || today.toDateString() !== lastPracticeDate.toDateString()) {
+            const yesterday = new Date();
+            yesterday.setDate(today.getDate() - 1);
+
+            if (lastPracticeDate && lastPracticeDate.toDateString() === yesterday.toDateString()) {
+                this.data.statistics.streakDays++;
+            } else {
+                this.data.statistics.streakDays = 1;
+            }
+            if (this.data.statistics.streakDays > this.data.statistics.longestStreak) {
+                this.data.statistics.longestStreak = this.data.statistics.streakDays;
+            }
+            this.data.statistics.lastPracticeDate = today.toISOString();
+        }
+        this.saveProgress();
     }
 
     addExperience(amount) {
@@ -217,56 +90,42 @@ class UserProgress {
         this.saveProgress();
     }
 
-    // Achievement System
-    checkAchievements(trigger) {
-        const achievements = {
-            'firstCorrect': {
-                id: 'firstCorrect',
-                title: 'First Step',
-                description: 'Get your first answer correct',
-                condition: () => this.data.statistics.totalCorrect > 0
-            },
-            'tenStreak': {
-                id: 'tenStreak',
-                title: 'On Fire!',
-                description: 'Maintain a 10-day study streak',
-                condition: () => this.data.statistics.streakDays >= 10
-            },
-            'level5': {
-                id: 'level5',
-                title: 'Rising Star',
-                description: 'Reach level 5',
-                condition: () => this.data.profile.level >= 5
-            },
-            'hundredCorrect': {
-                id: 'hundredCorrect',
-                title: 'Century',
-                description: 'Get 100 correct answers',
-                condition: () => this.data.statistics.totalCorrect >= 100
-            }
-        };
-
-        Object.values(achievements).forEach(achievement => {
-            if (!this.data.profile.achievements.includes(achievement.id) && achievement.condition()) {
-                this.unlockAchievement(achievement);
-            }
-        });
+    calculateLevel() {
+        const newLevel = Math.floor(this.data.profile.totalExp / 100) + 1;
+        if (newLevel !== this.data.profile.level) {
+            this.data.profile.level = newLevel;
+            // Future: show level up notification
+        }
+        return newLevel;
     }
 
-    unlockAchievement(achievement) {
-        this.data.profile.achievements.push(achievement.id);
+    getAchievementsList() {
+        return {
+            'firstCorrect': { id: 'firstCorrect', title: 'First Step', desc: 'Get 1 answer right' },
+            'tenStreak': { id: 'tenStreak', title: 'On Fire!', desc: '10 day streak' },
+            'level5': { id: 'level5', title: 'Rising Star', desc: 'Reach level 5' },
+            'hundredCorrect': { id: 'hundredCorrect', title: 'Century', desc: '100 correct answers' }
+        };
+    }
+
+    checkAchievements() {
+        const allAchievements = this.getAchievementsList();
+        Object.values(allAchievements).forEach(ach => {
+            if (this.data.profile.achievements.includes(ach.id)) return;
+            let condition = false;
+            if (ach.id === 'firstCorrect') condition = this.data.statistics.totalCorrect >= 1;
+            if (ach.id === 'tenStreak') condition = this.data.statistics.streakDays >= 10;
+            if (ach.id === 'level5') condition = this.data.profile.level >= 5;
+            if (ach.id === 'hundredCorrect') condition = this.data.statistics.totalCorrect >= 100;
+            if (condition) this.data.profile.achievements.push(ach.id);
+        });
         this.saveProgress();
-        // Return achievement data for UI notification
-        return achievement;
     }
 
     getProgress() {
-        return {
-            profile: this.data.profile,
-            statistics: this.data.statistics,
-            settings: this.data.settings,
-            masteryLevel: this.calculateMasteryLevel()
-        };
+        this.calculateMasteryLevel();
+        this.checkAchievements();
+        return this.data;
     }
 
     calculateMasteryLevel() {
