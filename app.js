@@ -1,3 +1,5 @@
+// app.js
+
 // Initialize global app state
 window.app = {
     dom: {},  // Contains all DOM element references
@@ -187,3 +189,88 @@ document.addEventListener('DOMContentLoaded', () => {
         showSection('profile-selection');
     }
 });
+
+
+// --- NEWLY ADDED FUNCTIONS TO INITIALIZE THE MAIN APP ---
+
+function initializeApp() {
+    console.log("Initializing main application...");
+    
+    // Cache references to the DOM elements you'll need
+    app.dom.sidebarForms = document.querySelector('.conjugation-forms');
+    app.dom.introPanel = document.getElementById('introduction-panel');
+    app.dom.introTitle = document.getElementById('intro-title');
+    app.dom.introContent = document.getElementById('intro-sections-container');
+    app.dom.cardPanel = document.querySelector('.card-panel');
+    app.dom.startPracticeBtn = document.getElementById('start-practice-button');
+    // ... add any other elements you frequently access here
+
+    populateSidebarMenu();
+    setupMainAppEventListeners();
+
+    // Load the default topic to start
+    loadTopic(app.state.currentTopic);
+}
+
+function populateSidebarMenu() {
+    if (!app.dom.sidebarForms) return;
+    
+    // Get all conjugation forms that are not for particles
+    const verbForms = conjugationForms.filter(form => 
+        !form.category || form.category !== 'Particles'
+    );
+        
+    app.dom.sidebarForms.innerHTML = ''; // Clear any existing items
+    verbForms.forEach(form => {
+        const li = document.createElement('li');
+        li.className = 'menu-item';
+        li.dataset.topic = form.key;
+        li.textContent = form.display;
+        app.dom.sidebarForms.appendChild(li);
+    });
+}
+
+function setupMainAppEventListeners() {
+    // Add event listener for the sidebar menu
+    app.dom.sidebarForms.addEventListener('click', (e) => {
+        if (e.target && e.target.classList.contains('menu-item')) {
+            const newTopic = e.target.dataset.topic;
+            loadTopic(newTopic);
+        }
+    });
+}
+
+function loadTopic(topicKey) {
+    console.log(`Loading topic: ${topicKey}`);
+    app.state.currentTopic = topicKey;
+    app.state.currentMode = "introduction"; // Start with the lesson
+
+    // Update the active state in the sidebar
+    app.dom.sidebarForms.querySelectorAll('.menu-item').forEach(item => {
+        item.classList.toggle('active', item.dataset.topic === topicKey);
+    });
+    
+    // Display the introduction content for the selected topic
+    const topicIntro = formIntroContent[topicKey];
+    if (topicIntro) {
+        app.dom.introTitle.textContent = topicIntro.title;
+        app.dom.introContent.innerHTML = ''; // Clear previous content
+        
+        topicIntro.sections.forEach(section => {
+            const sectionDiv = document.createElement('div');
+            sectionDiv.innerHTML = \`
+                <h3>\${section.heading}</h3>
+                <p>\${section.content.replace(/\n/g, '<br>')}</p>
+            \`;
+            app.dom.introContent.appendChild(sectionDiv);
+        });
+        
+        app.dom.introPanel.classList.remove('hidden');
+        app.dom.cardPanel.classList.add('hidden');
+        app.dom.startPracticeBtn.classList.remove('hidden');
+
+    } else {
+        // If no intro, just start practice (you can build this out later)
+        console.log("No introduction content for this topic. Starting practice...");
+    }
+}
