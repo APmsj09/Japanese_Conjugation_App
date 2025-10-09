@@ -131,40 +131,25 @@
         </div>
 
         <div id="practice-view" class="main-content hidden">
-    <main>
-        <div id="introduction-panel" class="hidden">
-            <h2 id="intro-title"></h2>
-            <div id="intro-sections-container"></div>
-            <button id="start-practice-button">Start Practice</button>
-        </div>
-
-        <div id="quiz-container" class="hidden">
-            <div class="card-panel">
-                <p id="kana-display"></p>
-                <p id="kanji-display"></p>
-                <p id="form-display"></p>
-                <p id="verb-type-display"></p>
-            </div>
-            <input type="text" id="answer-input" placeholder="Type Romaji here..." autocomplete="off">
-            <button id="check-button">Check</button>
-            <button id="next-button" class="hidden">Next</button>
-            <div class="feedback-area">
-                <p id="feedback-message"></p>
-                <p id="correct-answer-display"></p>
-            </div>
-            <div class="progress-area">
-                <div>
-                    <p>Correct: <span id="correct-count">0</span></p>
-                    <p>Incorrect: <span id="incorrect-count">0</span></p>
+            <main>
+                <div id="introduction-panel" class="hidden">
+                    <h2 id="intro-title"></h2>
+                    <div id="intro-sections-container"></div>
+                    <button id="start-practice-button">Start Practice</button>
                 </div>
-                <button id="reset-button">Reset</button>
-            </div>
+                <div id="quiz-container" class="hidden">
+                    <div class="card-panel"><p id="kana-display"></p><p id="kanji-display"></p><p id="form-display"></p><p id="verb-type-display"></p></div>
+                    <input type="text" id="answer-input" placeholder="Type Romaji here..." autocomplete="off">
+                    <button id="check-button">Check</button>
+                    <button id="next-button" class="hidden">Next</button>
+                    <div class="feedback-area"><p id="feedback-message"></p><p id="correct-answer-display"></p></div>
+                    <div class="progress-area"><div><p>Correct: <span id="correct-count">0</span></p><p>Incorrect: <span id="incorrect-count">0</span></p></div><button id="reset-button">Reset</button></div>
+                </div>
+            </main>
         </div>
-    </main>
-</div>
+    </div>
 
-<script src="https://unpkg.com/wanakana"></script> 
-    
+    <script src="https://unpkg.com/wanakana"></script>
     <script src="data.js"></script>
     <script src="userProgress.js"></script>
     <script src="app.js"></script>
