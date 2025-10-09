@@ -68,6 +68,8 @@ function initializeApp() {
         correctCount: document.getElementById('correct-count'),
         incorrectCount: document.getElementById('incorrect-count')
     };
+
+    wanakana.bind(app.dom.answerInput);
     setupEventListeners();
     populateSidebarMenu();
     showDashboard();
@@ -142,6 +144,12 @@ function populateSidebarMenu() {
     else forms = [];
     app.dom.sidebarForms.innerHTML = forms.map(f => `<li class="menu-item" data-topic="${f.key}">${f.display}</li>`).join('');
 }
+function initializeApp() {
+    app.dom = {
+        // ... all your other dom elements
+        answerInput: document.getElementById('answer-input'),
+        // ... etc.
+    };
 
 function buildLearningQueue() {
     const source = app.state.currentPracticeType === 'verbs' ? japaneseVerbs : japaneseAdjectives;
