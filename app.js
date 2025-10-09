@@ -52,7 +52,7 @@ function initializeApp() {
         dashboardView: document.getElementById('dashboard-view'),
         practiceView: document.getElementById('practice-view'),
         introPanel: document.getElementById('introduction-panel'),
-        quizContainer: document.getElementById('quiz-container'), // UPDATED
+        quizContainer: document.getElementById('quiz-container'),
         introTitle: document.getElementById('intro-title'),
         introContent: document.getElementById('intro-sections-container'),
         startPracticeBtn: document.getElementById('start-practice-button'),
@@ -68,13 +68,11 @@ function initializeApp() {
         correctCount: document.getElementById('correct-count'),
         incorrectCount: document.getElementById('incorrect-count')
     };
-
     wanakana.bind(app.dom.answerInput);
     setupEventListeners();
     populateSidebarMenu();
     showDashboard();
 }
-
 
 function setupEventListeners() {
     app.dom.mainMenu.addEventListener('click', (e) => {
@@ -124,11 +122,8 @@ function showDashboard() {
 function loadTopic(topicKey) {
     showView('practice');
     app.state.currentTopic = topicKey;
-    
-    // UPDATED LOGIC
-    app.dom.quizContainer.classList.add('hidden'); // Hide the quiz
-    app.dom.introPanel.classList.remove('hidden'); // Show the lesson
-
+    app.dom.quizContainer.classList.add('hidden');
+    app.dom.introPanel.classList.remove('hidden');
     const topicIntro = formIntroContent[topicKey];
     if (topicIntro) {
         app.dom.introTitle.textContent = topicIntro.title;
@@ -144,12 +139,6 @@ function populateSidebarMenu() {
     else forms = [];
     app.dom.sidebarForms.innerHTML = forms.map(f => `<li class="menu-item" data-topic="${f.key}">${f.display}</li>`).join('');
 }
-function initializeApp() {
-    app.dom = {
-        // ... all your other dom elements
-        answerInput: document.getElementById('answer-input'),
-        // ... etc.
-    };
 
 function buildLearningQueue() {
     const source = app.state.currentPracticeType === 'verbs' ? japaneseVerbs : japaneseAdjectives;
@@ -169,20 +158,11 @@ function buildLearningQueue() {
 
 function startPractice() {
     buildLearningQueue();
-    if (app.state.learningQueue.length === 0) {
-        alert("No items to practice!");
-        showDashboard();
-        return;
-    }
-    
-    // UPDATED LOGIC
-    app.dom.introPanel.classList.add('hidden'); // Hide the lesson
-    app.dom.quizContainer.classList.remove('hidden'); // Show the quiz
-
-    app.state.correctCount = 0;
-    app.state.incorrectCount = 0;
-    app.dom.correctCount.textContent = '0';
-    app.dom.incorrectCount.textContent = '0';
+    if (app.state.learningQueue.length === 0) { alert("No items to practice!"); showDashboard(); return; }
+    app.dom.introPanel.classList.add('hidden');
+    app.dom.quizContainer.classList.remove('hidden');
+    app.state.correctCount = 0; app.state.incorrectCount = 0;
+    app.dom.correctCount.textContent = '0'; app.dom.incorrectCount.textContent = '0';
     nextCard();
 }
 
