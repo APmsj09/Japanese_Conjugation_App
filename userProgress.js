@@ -58,7 +58,7 @@ class UserProgress {
             yesterday.setDate(today.getDate() - 1);
             if (lastPractice && lastPractice.toDateString() === yesterday.toDateString()) {
                 this.data.statistics.streakDays++;
-            } else if (!lastPractice || today.toDateString() !== lastPractice.toDateString()) {
+            } else {
                 this.data.statistics.streakDays = 1;
             }
             if (this.data.statistics.streakDays > this.data.statistics.longestStreak) {
@@ -78,7 +78,6 @@ class UserProgress {
     calculateLevel() {
         const newLevel = Math.floor(this.data.profile.totalExp / 100) + 1;
         if (newLevel !== this.data.profile.level) this.data.profile.level = newLevel;
-        return newLevel;
     }
 
     getAchievementsList() {
@@ -111,7 +110,6 @@ class UserProgress {
         else if (accuracy >= 0.75) newRank = 'Advanced';
         else if (accuracy >= 0.6) newRank = 'Intermediate';
         if (newRank !== this.data.profile.currentRank) this.data.profile.currentRank = newRank;
-        return newRank;
     }
 
     getProgress() {
@@ -121,6 +119,9 @@ class UserProgress {
         return this.data;
     }
 
-    startSession() { this.data.statistics.sessionCount++; this.saveProgress(); }
+    startSession() {
+        this.data.statistics.sessionCount++;
+        this.saveProgress();
+    }
 }
 const userProgress = new UserProgress();
